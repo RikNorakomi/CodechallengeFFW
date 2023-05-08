@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.navigation.compose.rememberNavController
 import com.vanvelzen.codechallengeffw.android.ui.OverViewScreen
 import com.vanvelzen.codechallengeffw.android.ui.Routes
@@ -12,6 +13,8 @@ import androidx.navigation.compose.composable
 import co.touchlab.kermit.Logger
 import com.vanvelzen.codechallengeffw.android.ui.DetailScreen
 import com.vanvelzen.codechallengeffw.injectLogger
+import com.vanvelzen.codechallengeffw.ui.StarWarsViewModel
+import org.koin.androidx.compose.getViewModel
 import org.koin.core.component.KoinComponent
 
 class MainActivity : ComponentActivity(), KoinComponent {
@@ -30,13 +33,19 @@ class MainActivity : ComponentActivity(), KoinComponent {
 
 @Composable
 fun StarWarsApp(log: Logger) {
-    log.v { "*** StarWarsApp composable!!" }
+
     val navController = rememberNavController()
+    val starWarsViewModel = getViewModel<StarWarsViewModel>()
+    val sharedViewModel: StarWarsViewModel = remember { starWarsViewModel } // prevents reinitialization of ViewModel that's shared across composables
+
+    // TODO: How to prevent multiple clicks on list item to recompose detail screen multiple times?
+    // TODO: https://al-e-shevelev.medium.com/how-to-prevent-multiple-clicks-in-android-jetpack-compose-8e62224c9c5e
+
     NavHost(navController = navController, startDestination = Routes.OverviewScreen) {
-        composable(Routes.OverviewScreen) { OverViewScreen(navController) }
+        composable(Routes.OverviewScreen) { OverViewScreen(navController, sharedViewModel) }
         composable("${Routes.DetailScreen}/{itemId}") { backStackEntry ->
             val itemId = backStackEntry.arguments?.getString("itemId")
-            DetailScreen(itemId)
+            DetailScreen(itemId, sharedViewModel, log)
         }
     }
 }

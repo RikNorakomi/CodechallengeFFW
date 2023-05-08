@@ -5,7 +5,7 @@ import android.content.Context
 import android.util.Log
 import com.vanvelzen.codechallengeffw.AppInfo
 import com.vanvelzen.codechallengeffw.initKoin
-import com.vanvelzen.codechallengeffw.ui.OverviewViewModel
+import com.vanvelzen.codechallengeffw.ui.StarWarsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
@@ -17,7 +17,7 @@ class MainApp : Application() {
         initKoin(
             module {
                 single<Context> { this@MainApp }
-                viewModel { OverviewViewModel(get(), get { parametersOf("OverviewViewModel") }) }
+                viewModel { StarWarsViewModel(get(), get { parametersOf("StarWarsViewModel") }) }
                 single<AppInfo> { AndroidAppInfo }
                 single {
                     { Log.i("Startup", "Hello from the Android version!") }

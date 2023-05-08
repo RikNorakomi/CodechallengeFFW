@@ -24,6 +24,10 @@ class StarWarsApiImpl(
     engine: HttpClientEngine
 ) : StarWarsApi {
 
+    companion object {
+        const val BASE_URL = "https://swapi.dev/"
+    }
+
     private val client = HttpClient(engine) {
         expectSuccess = true
 
@@ -48,15 +52,11 @@ class StarWarsApiImpl(
             socketTimeoutMillis = timeout
         }
     }
-//
-//    init {
-//        ensureNeverFrozen()
-//    }
 
 
     private fun HttpRequestBuilder.people(path: String) {
         url {
-            takeFrom("https://swapi.dev/")
+            takeFrom(BASE_URL)
             encodedPath = path
         }
     }
@@ -64,7 +64,7 @@ class StarWarsApiImpl(
     override suspend fun getPeople(): PeopleResponse {
         log.d { "Fetching People (Star Wars characters) from network" }
         return client.get {
-            people("people")
+            people("api/people")
         }.body()
     }
 }

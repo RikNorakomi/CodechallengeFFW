@@ -14,6 +14,9 @@ open class StarWarsViewModel(
     log: Logger
 ) : ViewModel() {
 
+    var personName = ""
+        private set
+
     init {
         log.e { "StarWarsViewModel instantiation!" }
     }
@@ -48,6 +51,10 @@ open class StarWarsViewModel(
 
     fun onPullToRefresh() {
         TODO("Not yet implemented")
+    }
+
+    fun onPersonSelected(person: People) {
+        personName = person.name
     }
 }
 

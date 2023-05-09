@@ -21,18 +21,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import org.koin.androidx.compose.getViewModel
 import com.vanvelzen.codechallengeffw.android.R
 import com.vanvelzen.codechallengeffw.data.DummyData
 import com.vanvelzen.codechallengeffw.data.dto.People
 import com.vanvelzen.codechallengeffw.data.dto.getID
 import com.vanvelzen.codechallengeffw.ui.StarWarsViewModel
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun OverViewScreen(
-    navController: NavHostController,
-    viewModel: StarWarsViewModel
+    viewModel: StarWarsViewModel,
+    onItemClick: (People) -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
 
@@ -41,7 +39,7 @@ fun OverViewScreen(
             Empty() else
             CharacterList(
                 people = it,
-                onItemClick = { item -> navController.navigate("${Routes.DetailScreen}/${item.getID()}") }
+                onItemClick = { people -> onItemClick(people) }
             )
     }
 }

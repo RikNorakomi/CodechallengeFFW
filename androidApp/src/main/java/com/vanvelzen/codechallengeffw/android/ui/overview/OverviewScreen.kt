@@ -1,21 +1,22 @@
-package com.vanvelzen.codechallengeffw.android.ui
+package com.vanvelzen.codechallengeffw.android.ui.overview
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.vanvelzen.codechallengeffw.android.ui.CustomDivider
+import com.vanvelzen.codechallengeffw.android.ui.PlaceholderEmptyState
+import com.vanvelzen.codechallengeffw.android.ui.PlaceholderErrorState
+import com.vanvelzen.codechallengeffw.android.ui.PlaceholderLoadingState
 import com.vanvelzen.codechallengeffw.data.DummyData
 import com.vanvelzen.codechallengeffw.data.dto.People
 import com.vanvelzen.codechallengeffw.ui.OverviewScreenViewModel
@@ -39,12 +40,16 @@ fun OverViewScreen(
 
 @Composable
 fun CharacterList(people: List<People>, onItemClick: (People) -> Unit) {
-    LazyColumn {
+    LazyColumn(
+        modifier = Modifier
+            .padding(all = 8.dp)
+            .padding(top = 20.dp)
+    ) {
         items(people) { character ->
             StarWarsCharacterRow(character) {
                 onItemClick(it)
             }
-            Divider()
+            CustomDivider()
         }
     }
 }
@@ -56,7 +61,11 @@ fun StarWarsCharacterRow(character: People, onClick: (People) -> Unit) {
             .clickable { onClick(character) }
             .padding(10.dp)) {
         ThumbnailIcon(character)
-        Text(character.name, Modifier.weight(1F))
+        Text(
+            text = character.name,
+            color = MaterialTheme.colors.onBackground,
+            modifier = Modifier.weight(1F)
+        )
     }
 }
 

@@ -1,16 +1,13 @@
 package com.vanvelzen.codechallengeffw.ui
 
-import com.vanvelzen.codechallengeffw.data.dto.People
+import co.touchlab.kermit.Logger
 import com.vanvelzen.codechallengeffw.models.ViewModel
 
-class TopBarViewModel : ViewModel() {
+class TopBarViewModel(log: Logger) : ViewModel() {
 
-    var selectedPerson: People? = null
-        private set
-
-
-    fun onPersonSelected(person: People) {
-        selectedPerson = person
+    init {
+        log.e { "TopBarViewModel instantiation!!" }
     }
 
+    var title: String = ""
 }

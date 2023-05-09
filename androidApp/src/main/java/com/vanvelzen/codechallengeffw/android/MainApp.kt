@@ -21,7 +21,7 @@ class MainApp : Application() {
                 single<Context> { this@MainApp }
                 viewModel { OverviewScreenViewModel(get(), get { parametersOf("StarWarsViewModel") }) }
                 viewModel { DetailScreenViewModel(get(), get { parametersOf("DetailScreenViewModel") }) }
-                viewModel { TopBarViewModel() }
+                viewModel { TopBarViewModel(get { parametersOf("DetailScreenViewModel") }) }
                 single<AppInfo> { AndroidAppInfo }
                 single {
                     { Log.i("Startup", "Hello from the Android version!") }

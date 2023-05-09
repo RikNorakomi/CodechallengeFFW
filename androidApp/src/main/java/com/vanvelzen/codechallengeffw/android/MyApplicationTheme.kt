@@ -2,6 +2,7 @@ package com.vanvelzen.codechallengeffw.android
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Shapes
 import androidx.compose.material.Typography
@@ -24,13 +25,21 @@ fun MyApplicationTheme(
         darkColors(
             primary = Color(0xFFBB86FC),
             primaryVariant = Color(0xFF3700B3),
-            secondary = Color(0xFF03DAC5)
+            secondary = Color(0xFF03DAC5),
+            background = Color.Black,
+            onBackground = Color(0XFFffc500),
+            surface= Color(0XFF37383b),
+            onSurface = Color.White,
         )
     } else {
         lightColors(
             primary = Color(0xFF6200EE),
             primaryVariant = Color(0xFF3700B3),
-            secondary = Color(0xFF03DAC5)
+            secondary = Color(0xFF03DAC5),
+            background = Color.Black,
+            onBackground = Color(0XFFffc500),
+            surface= Color(0XFF37383b),
+            onSurface = Color.White,
         )
     }
     val typography = Typography(
@@ -50,6 +59,16 @@ fun MyApplicationTheme(
         colors = colors,
         typography = typography,
         shapes = shapes,
-        content = content
+        content = content,
     )
 }
+
+/**
+ * Section to add custom colors to the Theme
+ */
+@get:Composable
+val Colors.dividerColor: Color
+    get() = if (isLight) Color(0XFF7c7c7c) else Color.LightGray
+
+
+

@@ -20,13 +20,14 @@ import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderLoadingState
 import com.vanvelzen.codechallengeffw.data.DummyDataSwapi
 import com.vanvelzen.codechallengeffw.data.dto.People
 import com.vanvelzen.codechallengeffw.data.dto.PeopleWithImages
+import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 import com.vanvelzen.codechallengeffw.ui.OverviewScreenViewModel
 import com.vanvelzen.codechallengeffw.ui.UiStateOverview2
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun OverViewScreen(
-    onItemClick: (People) -> Unit
+    onItemClick: (StarWarsCharacter) -> Unit
 ) {
     val viewModel: OverviewScreenViewModel = koinViewModel()
     val state by viewModel.uiState.collectAsState()
@@ -53,7 +54,7 @@ fun OverViewScreen(
 }
 
 @Composable
-fun CharacterList(people: List<PeopleWithImages>, onItemClick: (PeopleWithImages) -> Unit) {
+fun CharacterList(people: List<StarWarsCharacter>, onItemClick: (StarWarsCharacter) -> Unit) {
     LazyColumn(
         modifier = Modifier
             .padding(all = 8.dp)
@@ -69,7 +70,7 @@ fun CharacterList(people: List<PeopleWithImages>, onItemClick: (PeopleWithImages
 }
 
 @Composable
-fun StarWarsCharacterRow(character: PeopleWithImages, onClick: (PeopleWithImages) -> Unit) {
+fun StarWarsCharacterRow(character: StarWarsCharacter, onClick: (StarWarsCharacter) -> Unit) {
     Row(
         Modifier
             .clickable { onClick(character) }
@@ -84,7 +85,7 @@ fun StarWarsCharacterRow(character: PeopleWithImages, onClick: (PeopleWithImages
 }
 
 @Composable // TODO
-fun ThumbnailIcon(people: PeopleWithImages) {
+fun ThumbnailIcon(people: StarWarsCharacter) {
 
 }
 

@@ -101,7 +101,7 @@ fun StarWarsApp(log: Logger) {
                 composable(route = Routes.OverviewScreen) {
                     OverViewScreen() { person ->
                         topBarViewModel.title = person.name
-                        navController.navigate("${Routes.DetailScreen}/${person.getID()}")
+                        navController.navigate("${Routes.DetailScreen}/${person.id}")
                     }
                 }
                 composable(route = "${Routes.DetailScreen}/{itemId}") { backStackEntry ->

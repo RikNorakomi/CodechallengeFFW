@@ -29,8 +29,9 @@ import co.touchlab.kermit.Logger
 import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderErrorState
 import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderLoadingState
 import com.vanvelzen.codechallengeffw.data.DummyDataSwapi
-import com.vanvelzen.codechallengeffw.data.dto.People
+import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 import com.vanvelzen.codechallengeffw.ui.DetailScreenViewModel
+import com.vanvelzen.codechallengeffw.ui.UiStateDetail2
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -43,24 +44,35 @@ fun DetailScreen(
     val viewModel: DetailScreenViewModel = koinViewModel()
     val state by viewModel.uiState.collectAsState()
 
+    // TODO: Look into only one time fetching from api
     LaunchedEffect(true) {
         viewModel.fetchCharacterDetails(characterId)
     }
 
-    // TODO Use SCSI for state to code gracefully handle various states
-    // TODO: Add more graceful impl with sealed classes
-    if (state.error != null) PlaceholderErrorState(error = state.error!!)
-    else if (state.isLoading) PlaceholderLoadingState(MaterialTheme.colors.onSurface)
-    else state.character?.let {
-        DetailScreenContent(person = it)
-        log.v { "Detail screen for Star Wars character with name:${state.character?.name}" }
+    when (state){
+        is UiStateDetail2.Error -> PlaceholderErrorState(error = (state as UiStateDetail2.Error).errorMessage)
+        is UiStateDetail2.Loading -> PlaceholderLoadingState(MaterialTheme.colors.onSurface)
+        is UiStateDetail2.Success -> {
+            val character = (state as UiStateDetail2.Success).character
+            log.v { "Detail screen for Star Wars character with name:${character.name}" }
+            DetailScreenContent(person = character)
+        }
     }
+//
+//    // TODO Use SCSI for state to code gracefully handle various states
+//    // TODO: Add more graceful impl with sealed classes
+//    if (state.error != null) PlaceholderErrorState(error = state.error!!)
+//    else if (state.isLoading) PlaceholderLoadingState(MaterialTheme.colors.onSurface)
+//    else state.character?.let {
+//        DetailScreenContent(person = it)
+//        log.v { "Detail screen for Star Wars character with name:${state.character?.name}" }
+//    }
 
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun DetailScreenContent(person: People) {
+fun DetailScreenContent(person: StarWarsCharacter) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -136,14 +148,14 @@ fun DetailScreenContent(person: People) {
     }
 }
 
-fun People.createCharacterDetailsMap(): LinkedHashMap<String, String> {
+fun StarWarsCharacter.createCharacterDetailsMap(): LinkedHashMap<String, String> {
     return with(this) {
         linkedMapOf(
             "name" to name,
             "birth year" to birthYear,
             "gender" to gender,
             "height" to height,
-            "home world" to homeworld,
+            "home world" to homeWorld,
             "mass" to mass,
             "skin color" to skinColor,
             "eye color" to eyeColor,

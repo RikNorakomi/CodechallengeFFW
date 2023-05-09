@@ -1,10 +1,10 @@
 package com.vanvelzen.codechallengeffw.data
 
-import com.vanvelzen.codechallengeffw.data.dto.People
+import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 
 object DummyDataSwapi {
     val items = listOf(
-        People(
+        StarWarsCharacter(
             name = "Luke Skywalker",
             height = "172",
             mass = "77",
@@ -13,8 +13,8 @@ object DummyDataSwapi {
             eyeColor = "blue",
             birthYear = "19BBY",
             gender = "male",
-            homeworld = "Tatooine",
-            url = "https://swapi.dev/api/people/1/",
+            homeWorld = "Tatooine",
+            imageUrl = "https://swapi.dev/api/people/1/",
             films = listOf("https://swapi.dev/api/films/1/",
                 "https://swapi.dev/api/films/2/",
                 "https://swapi.dev/api/films/3/",
@@ -22,7 +22,7 @@ object DummyDataSwapi {
             )
 
         ),
-        People(
+        StarWarsCharacter(
             name = "C-3PO",
             height = "167",
             mass = "75",
@@ -31,9 +31,9 @@ object DummyDataSwapi {
             eyeColor = "yellow",
             birthYear = "112BBY",
             gender = "n/a",
-            url = "https://swapi.dev/api/people/2/"
+            imageUrl = "https://swapi.dev/api/people/2/"
         ),
-        People(
+        StarWarsCharacter(
             name = "R2-D2",
             height = "96",
             mass = "32",
@@ -42,9 +42,9 @@ object DummyDataSwapi {
             eyeColor = "red",
             birthYear = "33BBY",
             gender = "n/a",
-            url = "https://swapi.dev/api/people/3/"
+            imageUrl = "https://swapi.dev/api/people/3/"
         ),
-        People(
+        StarWarsCharacter(
             name = "Darth Vader",
             height = "202",
             mass = "136",
@@ -53,9 +53,9 @@ object DummyDataSwapi {
             eyeColor = "yellow",
             birthYear = "41.9BBY",
             gender = "male",
-            url = "https://swapi.dev/api/people/4/"
+            imageUrl = "https://swapi.dev/api/people/4/"
         ),
-        People(
+        StarWarsCharacter(
             name = "Leia Organa",
             height = "150",
             mass = "49",
@@ -64,9 +64,9 @@ object DummyDataSwapi {
             eyeColor = "brown",
             birthYear = "19BBY",
             gender = "female",
-            url = "https://swapi.dev/api/people/5/"
+            imageUrl = "https://swapi.dev/api/people/5/"
         ),
-        People(
+        StarWarsCharacter(
             name = "Owen Lars",
             height = "178",
             mass = "120",
@@ -75,9 +75,9 @@ object DummyDataSwapi {
             eyeColor = "blue",
             birthYear = "52BBY",
             gender = "male",
-            url = "https://swapi.dev/api/people/6/"
+            imageUrl = "https://swapi.dev/api/people/6/"
         ),
-        People(
+        StarWarsCharacter(
             name = "Beru Whitesun lars",
             height = "165",
             mass = "75",
@@ -86,9 +86,9 @@ object DummyDataSwapi {
             eyeColor = "blue",
             birthYear = "47BBY",
             gender = "female",
-            url = "https://swapi.dev/api/people/7/"
+            imageUrl = "https://swapi.dev/api/people/7/"
         ),
-        People(
+        StarWarsCharacter(
             name = "R5-D4",
             height = "97",
             mass = "32",
@@ -97,9 +97,9 @@ object DummyDataSwapi {
             eyeColor = "red",
             birthYear = "unknown",
             gender = "n/a",
-            url = "https://swapi.dev/api/people/8/"
+            imageUrl = "https://swapi.dev/api/people/8/"
         ),
-        People(
+        StarWarsCharacter(
             name = "Biggs Darklighter",
             height = "183",
             mass = "84",
@@ -108,9 +108,9 @@ object DummyDataSwapi {
             eyeColor = "brown",
             birthYear = "24BBY",
             gender = "male",
-            url = "https://swapi.dev/api/people/9/"
+            imageUrl = "https://swapi.dev/api/people/9/"
         ),
-        People(
+        StarWarsCharacter(
             name = "Obi-Wan Kenobi",
             height = "        182",
             mass = "77",
@@ -119,9 +119,9 @@ object DummyDataSwapi {
             eyeColor = "blue-gray",
             birthYear = "57BBY",
             gender = "male",
-            url = "https://swapi.dev/api/people/10/"
+            imageUrl = "https://swapi.dev/api/people/10/"
         ),
-        People(
+        StarWarsCharacter(
             name = "Anakin Skywalker",
             height = "188",
             mass = "84",
@@ -130,9 +130,9 @@ object DummyDataSwapi {
             eyeColor = "blue",
             birthYear = "41.9BBY",
             gender = "male",
-            url = "https://swapi.dev/api/people/11/"
+            imageUrl = "https://swapi.dev/api/people/11/"
         ),
-        People(
+        StarWarsCharacter(
             name = "Wilhuff Tarkin",
             height = "180",
             mass = "unknown",
@@ -141,9 +141,9 @@ object DummyDataSwapi {
             eyeColor = "blue",
             birthYear = "64BBY",
             gender = "male",
-            url = "https://swapi.dev/api/people/12/"
+            imageUrl = "https://swapi.dev/api/people/12/"
         ),
-        People(
+        StarWarsCharacter(
             name = "Chewbacca",
             height = "228",
             mass = "112",
@@ -152,9 +152,9 @@ object DummyDataSwapi {
             eyeColor = "blue",
             birthYear = "200BBY",
             gender = "male",
-            url = "https://swapi.dev/api/people/13/"
+            imageUrl = "https://swapi.dev/api/people/13/"
         ),
-        People(
+        StarWarsCharacter(
             name = "Han Solo",
             height = "180",
             mass = "80",
@@ -163,9 +163,9 @@ object DummyDataSwapi {
             eyeColor = "brown",
             birthYear = "29BBY",
             gender = "male",
-            url = "https://swapi.dev/api/people/14/"
+            imageUrl = "https://swapi.dev/api/people/14/"
         ),
-        People(
+        StarWarsCharacter(
             name = "Greedo",
             height = "173",
             mass = "74",
@@ -174,7 +174,7 @@ object DummyDataSwapi {
             eyeColor = "black",
             birthYear = "44BBY",
             gender = "male",
-            url = "https://swapi.dev/api/people/15/"
+            imageUrl = "https://swapi.dev/api/people/15/"
         )
     )
 }

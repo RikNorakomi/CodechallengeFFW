@@ -2,9 +2,8 @@ package com.vanvelzen.codechallengeffw.ui
 
 import co.touchlab.kermit.Logger
 import com.vanvelzen.codechallengeffw.data.api.Response
-import com.vanvelzen.codechallengeffw.data.dto.People
-import com.vanvelzen.codechallengeffw.data.dto.PeopleWithImages
 import com.vanvelzen.codechallengeffw.data.repository.StarWarsRepository
+import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 import com.vanvelzen.codechallengeffw.models.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -55,7 +54,7 @@ open class OverviewScreenViewModel(
 }
 
 data class UiStateOverview(
-    val people: List<People>? = null,
+    val people: List<StarWarsCharacter>? = null,
     val error: String? = null,
     val isLoading: Boolean = false,
     val showEmptyState: Boolean = false
@@ -63,7 +62,7 @@ data class UiStateOverview(
 
 
 sealed class UiStateOverview2 {
-    data class Success(val people: List<PeopleWithImages>) : UiStateOverview2()
+    data class Success(val people: List<StarWarsCharacter>) : UiStateOverview2()
     data class Error(val errorMessage: String) : UiStateOverview2()
     object Loading : UiStateOverview2()
 }

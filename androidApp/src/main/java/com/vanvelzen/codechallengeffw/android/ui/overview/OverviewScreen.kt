@@ -14,9 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vanvelzen.codechallengeffw.android.ui.CustomDivider
-import com.vanvelzen.codechallengeffw.android.ui.PlaceholderEmptyState
-import com.vanvelzen.codechallengeffw.android.ui.PlaceholderErrorState
-import com.vanvelzen.codechallengeffw.android.ui.PlaceholderLoadingState
+import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderEmptyState
+import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderErrorState
+import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderLoadingState
 import com.vanvelzen.codechallengeffw.data.DummyData
 import com.vanvelzen.codechallengeffw.data.dto.People
 import com.vanvelzen.codechallengeffw.ui.OverviewScreenViewModel

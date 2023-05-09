@@ -1,6 +1,5 @@
 package com.vanvelzen.codechallengeffw.android.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,6 +26,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Logger
+import com.vanvelzen.codechallengeffw.android.ui.overview.CharacterList
+import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderEmptyState
+import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderErrorState
+import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderLoadingState
 import com.vanvelzen.codechallengeffw.data.DummyData
 import com.vanvelzen.codechallengeffw.data.dto.People
 import com.vanvelzen.codechallengeffw.ui.DetailScreenViewModel
@@ -47,9 +50,14 @@ fun DetailScreen(
     }
 
     // TODO Use SCSI for state to code gracefully handle various states
+    // TODO: Add more graceful impl with sealed classes
+    if (state.error != null) PlaceholderErrorState(error = state.error!!)
+    else if (state.isLoading) PlaceholderLoadingState(MaterialTheme.colors.onSurface)
+    else state.character?.let {
+        DetailScreenContent(person = it)
+        log.v { "Detail screen for Star Wars character with name:${state.character?.name}" }
+    }
 
-    log.v { "Detail screen for Star Wars character with name:${state.character?.name}" }
-    state.character?.let { DetailScreenContent(person = it) }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -78,7 +86,8 @@ fun DetailScreenContent(person: People) {
                 val keys = detailsMap.keys.toList()
                 val values = detailsMap.values.toList()
                 val numColumns = 3
-                val numRows = (keys.size + numColumns - 1) / numColumns // Round up to nearest integer
+                val numRows =
+                    (keys.size + numColumns - 1) / numColumns // Round up to nearest integer
                 for (i in 0 until numRows) {
                     Row(
                         modifier = Modifier

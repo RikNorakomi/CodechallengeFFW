@@ -1,11 +1,11 @@
 package com.vanvelzen.codechallengeffw.data.repository
 
 import co.touchlab.kermit.Logger
-import com.vanvelzen.codechallengeffw.data.api.StarWarsApi
+import com.vanvelzen.codechallengeffw.data.api.StarWarsWithImagesApi
 import com.vanvelzen.codechallengeffw.data.dto.People
 
 class StarWarsRepository(
-    private val starWarsApi: StarWarsApi,
+    private val starWarsApi: StarWarsWithImagesApi,
     log: Logger
 ){
 

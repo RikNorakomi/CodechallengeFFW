@@ -5,6 +5,5 @@ import com.vanvelzen.codechallengeffw.data.dto.PeopleResponse
 
 interface StarWarsApi {
     suspend fun getPeople(): PeopleResponse
-
     suspend fun getPersonById(id: String): People
 }

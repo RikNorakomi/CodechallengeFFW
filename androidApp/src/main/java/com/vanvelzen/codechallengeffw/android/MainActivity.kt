@@ -4,8 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -15,8 +18,11 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -65,8 +71,9 @@ fun StarWarsApp(log: Logger) {
                 .fillMaxSize()
                 .background(MaterialTheme.colors.background)
         ) {
-            val textColor = if (isDetailScreenShowing) MaterialTheme.colors.onSurface else MaterialTheme.colors.onBackground
-            TopAppBar(
+            val textColor =
+                if (isDetailScreenShowing) MaterialTheme.colors.onSurface else MaterialTheme.colors.onBackground
+            if (isDetailScreenShowing) TopAppBar(
                 backgroundColor = Color.Transparent,
                 title = {
                     Text(
@@ -75,14 +82,21 @@ fun StarWarsApp(log: Logger) {
                     )
                 },
                 navigationIcon = {
-                    if (isDetailScreenShowing) IconButton(
+                    IconButton(
                         onClick = { navController.popBackStack() }) {
                         Icon(
                             Icons.Filled.ArrowBack, null,
-                            tint = textColor
+                            tint = MaterialTheme.colors.onSurface
                         )
                     }
-                })
+                }) else
+                Box(modifier = Modifier.fillMaxWidth().padding(all = 8.dp)) {
+                    Text(
+                        text = topBarTitle,
+                        fontSize = 28.sp,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
 
             NavHost(navController = navController, startDestination = Routes.OverviewScreen) {
                 composable(route = Routes.OverviewScreen) {

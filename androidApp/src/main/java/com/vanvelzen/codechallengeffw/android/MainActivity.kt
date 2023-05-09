@@ -14,6 +14,9 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -26,7 +29,8 @@ import com.vanvelzen.codechallengeffw.android.ui.OverViewScreen
 import com.vanvelzen.codechallengeffw.android.ui.Routes
 import com.vanvelzen.codechallengeffw.data.dto.getID
 import com.vanvelzen.codechallengeffw.injectLogger
-import com.vanvelzen.codechallengeffw.ui.StarWarsViewModel
+import com.vanvelzen.codechallengeffw.ui.DetailScreenViewModel
+import com.vanvelzen.codechallengeffw.ui.TopBarViewModel
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.component.KoinComponent
 
@@ -48,10 +52,10 @@ class MainActivity : ComponentActivity(), KoinComponent {
 fun StarWarsApp(log: Logger) {
 
     val navController = rememberNavController()
-    val starWarsViewModel = getViewModel<StarWarsViewModel>()
-    val sharedViewModel: StarWarsViewModel = remember { starWarsViewModel } // prevents reinitialization of ViewModel that's shared across composables
+    val topBarViewModel = getViewModel<TopBarViewModel>()
+    val topBarVM: TopBarViewModel = remember { topBarViewModel } // prevents reinitialization of ViewModel that's shared across composables
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-    val topBarTitle = if (currentRoute?.contains(Routes.DetailScreen) == true) sharedViewModel.personName else "Star Wars App"
+    val topBarTitle: String = if (currentRoute?.contains(Routes.DetailScreen) == true) topBarVM.selectedPerson?.name ?: "" else "Star Wars App"
 
     // TODO: How to prevent multiple clicks on list item to recompose detail screen multiple times?
     // TODO: https://al-e-shevelev.medium.com/how-to-prevent-multiple-clicks-in-android-jetpack-compose-8e62224c9c5e
@@ -70,14 +74,14 @@ fun StarWarsApp(log: Logger) {
                 })
 
             NavHost(navController = navController, startDestination = Routes.OverviewScreen) {
-                composable(Routes.OverviewScreen) {
-                    OverViewScreen(sharedViewModel) { person ->
-                        sharedViewModel.onPersonSelected(person)
+                composable(route = Routes.OverviewScreen) {
+                    OverViewScreen() { person ->
+                        topBarVM.onPersonSelected(person)
                         navController.navigate("${Routes.DetailScreen}/${person.getID()}") }
                 }
-                composable("${Routes.DetailScreen}/{itemId}") { backStackEntry ->
-                    val itemId = backStackEntry.arguments?.getString("itemId")
-                    DetailScreen(itemId, sharedViewModel, log)
+                composable(route = "${Routes.DetailScreen}/{itemId}") { backStackEntry ->
+                    val characterId = backStackEntry.arguments?.getString("itemId")
+                    DetailScreen(characterId, log)
                 }
             }
         }

@@ -16,4 +16,10 @@ class StarWarsRepository(
         log.v { "starWarsApi people response count: ${peopleResponse.count}" }
         return peopleResponse.results
     }
+
+    suspend fun getCharacterDetails(characterId: String): People {
+        val response = starWarsApi.getPersonById(characterId)
+        log.v { "starWarsApi character detail response: $response" }
+        return response
+    }
 }

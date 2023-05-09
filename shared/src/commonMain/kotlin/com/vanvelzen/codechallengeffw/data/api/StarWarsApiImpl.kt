@@ -1,5 +1,6 @@
 package com.vanvelzen.codechallengeffw.data.api
 
+import com.vanvelzen.codechallengeffw.data.dto.People
 import com.vanvelzen.codechallengeffw.data.dto.PeopleResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -65,6 +66,13 @@ class StarWarsApiImpl(
         log.d { "Fetching People (Star Wars characters) from network" }
         return client.get {
             people("api/people")
+        }.body()
+    }
+
+    override suspend fun getPersonById(id: String): People {
+        log.d { "Fetching character details for person with id:$id" }
+        return client.get {
+            people("api/people/${id}")
         }.body()
     }
 }

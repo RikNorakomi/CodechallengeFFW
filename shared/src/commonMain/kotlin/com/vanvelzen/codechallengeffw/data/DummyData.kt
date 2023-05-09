@@ -13,7 +13,14 @@ object DummyData {
             eyeColor = "blue",
             birthYear = "19BBY",
             gender = "male",
-            url = "https://swapi.dev/api/people/1/"
+            homeworld = "Tatooine",
+            url = "https://swapi.dev/api/people/1/",
+            films = listOf("https://swapi.dev/api/films/1/",
+                "https://swapi.dev/api/films/2/",
+                "https://swapi.dev/api/films/3/",
+                "https://swapi.dev/api/films/6/"
+            )
+
         ),
         People(
             name = "C-3PO",

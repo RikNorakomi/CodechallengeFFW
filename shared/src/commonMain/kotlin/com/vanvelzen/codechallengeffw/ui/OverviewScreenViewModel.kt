@@ -9,21 +9,20 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-open class StarWarsViewModel(
+open class OverviewScreenViewModel(
     private val repository: StarWarsRepository,
     log: Logger
 ) : ViewModel() {
 
-    var personName = ""
-        private set
+
 
     init {
         log.e { "StarWarsViewModel instantiation!" }
     }
 
 
-    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState(isLoading = true))
-    val uiState: StateFlow<UiState> = _uiState
+    private val _uiState: MutableStateFlow<UiStateOverview> = MutableStateFlow(UiStateOverview(isLoading = true))
+    val uiState: StateFlow<UiStateOverview> = _uiState
 
 //    @NativeCoroutinesState
 //    val uiState: StateFlow<UiState> = flow {
@@ -39,7 +38,7 @@ open class StarWarsViewModel(
             val people = repository.getPeople()
             val errorMessage: String? = null
             _uiState.update {
-                UiState(
+                UiStateOverview(
                     isLoading = false,
                     people = people.takeIf { it.isNotEmpty() },
                     error = errorMessage.takeIf { people.isEmpty() },
@@ -53,12 +52,9 @@ open class StarWarsViewModel(
         TODO("Not yet implemented")
     }
 
-    fun onPersonSelected(person: People) {
-        personName = person.name
-    }
 }
 
-data class UiState(
+data class UiStateOverview(
     val people: List<People>? = null,
     val error: String? = null,
     val isLoading: Boolean = false,

@@ -1,5 +1,6 @@
 package com.vanvelzen.codechallengeffw.data.api
 
+import co.touchlab.kermit.Severity
 import com.vanvelzen.codechallengeffw.data.dto.PeopleWithImages
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -13,15 +14,21 @@ import io.ktor.client.request.get
 import io.ktor.http.encodedPath
 import io.ktor.http.takeFrom
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 import co.touchlab.kermit.Logger as KermitLogger
 import io.ktor.client.plugins.logging.Logger as KtorLogger
+
 
 /**
  * Client for the https://swapi.dev/ Star Wars api
  */
 class StarWarsWithImagesApiImpl(
     private val log: KermitLogger,
-    engine: HttpClientEngine
+    engine: HttpClientEngine,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) : StarWarsWithImagesApi {
 
     companion object {
@@ -61,17 +68,30 @@ class StarWarsWithImagesApiImpl(
         }
     }
 
-    override suspend fun getAllCharacters(): List<PeopleWithImages> {
-        log.d { "Fetching All People (Star Wars characters with Images) from network" }
-        return client.get {
-            people("all.json")
-        }.body()
+    override suspend fun getAllCharacters(): Response<List<PeopleWithImages>> {
+        return withContext(ioDispatcher) {
+            log.d { "Fetching all characters." }
+            try {
+                Response.Success(client.get {people("all.json") }.body())
+            } catch (e: Exception) {
+                // For the sake of simplicity for this code challenge we'll just return
+                Response.Error(e.toString())
+            }
+        }
     }
 
-    override suspend fun getCharacterById(id: String): PeopleWithImages {
-        log.d { "Fetching character details for person with id:$id" }
-        return client.get {
-            people("${id}.json")
-        }.body()
+
+
+
+    override suspend fun getCharacterById(id: String): Response<PeopleWithImages> {
+        return withContext(ioDispatcher) {
+            log.d { "Fetching character details for person with id:$id" }
+            try {
+                Response.Success(client.get {people("${id}.json") }.body())
+            } catch (e: Exception) {
+                // For the sake of simplicity for this code challenge we'll just return
+                Response.Error(e.toString())
+            }
+        }
     }
 }

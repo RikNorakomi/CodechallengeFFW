@@ -62,6 +62,7 @@ private val coreModule = module {
     single {
         StarWarsRepository(
             get(),
+            get(),
             get { parametersOf("StarWarsRepository") },
         )
     }

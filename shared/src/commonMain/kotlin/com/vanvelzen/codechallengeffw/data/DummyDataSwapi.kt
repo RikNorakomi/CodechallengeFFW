@@ -2,7 +2,7 @@ package com.vanvelzen.codechallengeffw.data
 
 import com.vanvelzen.codechallengeffw.data.dto.People
 
-object DummyData {
+object DummyDataSwapi {
     val items = listOf(
         People(
             name = "Luke Skywalker",

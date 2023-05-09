@@ -17,9 +17,11 @@ import com.vanvelzen.codechallengeffw.android.ui.CustomDivider
 import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderEmptyState
 import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderErrorState
 import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderLoadingState
-import com.vanvelzen.codechallengeffw.data.DummyData
+import com.vanvelzen.codechallengeffw.data.DummyDataSwapi
 import com.vanvelzen.codechallengeffw.data.dto.People
+import com.vanvelzen.codechallengeffw.data.dto.PeopleWithImages
 import com.vanvelzen.codechallengeffw.ui.OverviewScreenViewModel
+import com.vanvelzen.codechallengeffw.ui.UiStateOverview2
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -29,17 +31,29 @@ fun OverViewScreen(
     val viewModel: OverviewScreenViewModel = koinViewModel()
     val state by viewModel.uiState.collectAsState()
 
-    // TODO: Add more graceful impl with sealed classes
-    if (state.error != null) PlaceholderErrorState(error = state.error!!)
-    else if (state.isLoading) PlaceholderLoadingState()
-    else state.people?.let {
-        if (it.isEmpty()) PlaceholderEmptyState() else CharacterList(people = it,
-            onItemClick = { people -> onItemClick(people) })
+    when (state){
+        is UiStateOverview2.Error -> PlaceholderErrorState(error = (state as UiStateOverview2.Error).errorMessage)
+        is UiStateOverview2.Loading -> PlaceholderLoadingState()
+        is UiStateOverview2.Success -> {
+            val characters = (state as UiStateOverview2.Success).people
+            if (characters.isEmpty()) PlaceholderEmptyState()
+            else CharacterList(
+                people = characters,
+                onItemClick = { people -> onItemClick(people) }
+            )
+        }
     }
+//    // TODO: Add more graceful impl with sealed classes
+//    if (state.error != null) PlaceholderErrorState(error = state.error!!)
+//    else if (state.isLoading) PlaceholderLoadingState()
+//    else state.people?.let {
+//        if (it.isEmpty()) PlaceholderEmptyState() else CharacterList(people = it,
+//            onItemClick = { people -> onItemClick(people) })
+//    }
 }
 
 @Composable
-fun CharacterList(people: List<People>, onItemClick: (People) -> Unit) {
+fun CharacterList(people: List<PeopleWithImages>, onItemClick: (PeopleWithImages) -> Unit) {
     LazyColumn(
         modifier = Modifier
             .padding(all = 8.dp)
@@ -55,7 +69,7 @@ fun CharacterList(people: List<People>, onItemClick: (People) -> Unit) {
 }
 
 @Composable
-fun StarWarsCharacterRow(character: People, onClick: (People) -> Unit) {
+fun StarWarsCharacterRow(character: PeopleWithImages, onClick: (PeopleWithImages) -> Unit) {
     Row(
         Modifier
             .clickable { onClick(character) }
@@ -70,12 +84,12 @@ fun StarWarsCharacterRow(character: People, onClick: (People) -> Unit) {
 }
 
 @Composable // TODO
-fun ThumbnailIcon(people: People) {
+fun ThumbnailIcon(people: PeopleWithImages) {
 
 }
 
 @Preview
 @Composable
 fun MainScreenContentPreview_Success() {
-    CharacterList(people = DummyData.items, onItemClick = {})
+    CharacterList(people = DummyDataSwapi.items, onItemClick = {})
 }

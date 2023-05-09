@@ -1,4 +1,4 @@
-package com.vanvelzen.codechallengeffw.android.ui
+package com.vanvelzen.codechallengeffw.android.ui.detail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,11 +26,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Logger
-import com.vanvelzen.codechallengeffw.android.ui.overview.CharacterList
-import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderEmptyState
 import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderErrorState
 import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderLoadingState
-import com.vanvelzen.codechallengeffw.data.DummyData
+import com.vanvelzen.codechallengeffw.data.DummyDataSwapi
 import com.vanvelzen.codechallengeffw.data.dto.People
 import com.vanvelzen.codechallengeffw.ui.DetailScreenViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -138,7 +136,7 @@ fun DetailScreenContent(person: People) {
     }
 }
 
-private fun People.createCharacterDetailsMap(): HashMap<String, String> {
+fun People.createCharacterDetailsMap(): LinkedHashMap<String, String> {
     return with(this) {
         linkedMapOf(
             "name" to name,
@@ -158,6 +156,6 @@ private fun People.createCharacterDetailsMap(): HashMap<String, String> {
 @Composable
 fun DetailScreenContentPreview() {
     DetailScreenContent(
-        person = DummyData.items[0],
+        person = DummyDataSwapi.items[0],
     )
 }

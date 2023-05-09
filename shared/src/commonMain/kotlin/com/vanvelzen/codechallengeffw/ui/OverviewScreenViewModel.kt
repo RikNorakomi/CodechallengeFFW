@@ -1,7 +1,9 @@
 package com.vanvelzen.codechallengeffw.ui
 
 import co.touchlab.kermit.Logger
+import com.vanvelzen.codechallengeffw.data.api.Response
 import com.vanvelzen.codechallengeffw.data.dto.People
+import com.vanvelzen.codechallengeffw.data.dto.PeopleWithImages
 import com.vanvelzen.codechallengeffw.data.repository.StarWarsRepository
 import com.vanvelzen.codechallengeffw.models.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,8 +23,9 @@ open class OverviewScreenViewModel(
     }
 
 
-    private val _uiState: MutableStateFlow<UiStateOverview> = MutableStateFlow(UiStateOverview(isLoading = true))
-    val uiState: StateFlow<UiStateOverview> = _uiState
+    private val _uiState: MutableStateFlow<UiStateOverview2> =
+        MutableStateFlow(UiStateOverview2.Loading)
+    val uiState: StateFlow<UiStateOverview2> = _uiState
 
 //    @NativeCoroutinesState
 //    val uiState: StateFlow<UiState> = flow {
@@ -33,17 +36,14 @@ open class OverviewScreenViewModel(
         fetchStarWarsCharacters()
     }
 
-    private fun fetchStarWarsCharacters(){
+    private fun fetchStarWarsCharacters() {
         viewModelScope.launch {
-            val people = repository.getPeople()
-            val errorMessage: String? = null
+            val response = repository.getAllCharacters()
             _uiState.update {
-                UiStateOverview(
-                    isLoading = false,
-                    people = people.takeIf { it.isNotEmpty() },
-                    error = errorMessage.takeIf { people.isEmpty() },
-                    showEmptyState = people.isEmpty() && errorMessage == null
-                )
+                when (response) {
+                    is Response.Error -> UiStateOverview2.Error(response.errorMessage)
+                    is Response.Success -> UiStateOverview2.Success(response.data)
+                }
             }
         }
     }
@@ -60,3 +60,10 @@ data class UiStateOverview(
     val isLoading: Boolean = false,
     val showEmptyState: Boolean = false
 )
+
+
+sealed class UiStateOverview2 {
+    data class Success(val people: List<PeopleWithImages>) : UiStateOverview2()
+    data class Error(val errorMessage: String) : UiStateOverview2()
+    object Loading : UiStateOverview2()
+}

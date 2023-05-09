@@ -23,13 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import co.touchlab.kermit.Logger
-import com.vanvelzen.codechallengeffw.android.ui.DetailScreen
+import com.vanvelzen.codechallengeffw.android.ui.detail.DetailScreen
 import com.vanvelzen.codechallengeffw.android.ui.overview.OverViewScreen
 import com.vanvelzen.codechallengeffw.android.ui.Routes
 import com.vanvelzen.codechallengeffw.data.dto.getID

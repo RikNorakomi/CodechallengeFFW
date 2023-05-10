@@ -54,6 +54,9 @@ dependencies {
 //    implementation "io.ktor:ktor-client-json:1.6.3"
 //    implementation "io.ktor:ktor-client-serialization-jvm:1.6.3"
 
+    implementation("io.coil-kt:coil:2.3.0")
+    implementation("io.coil-kt:coil-compose:2.3.0")
+
 
 //    implementation(Koin.core)
 //    implementation(Koin.coreExtensions)

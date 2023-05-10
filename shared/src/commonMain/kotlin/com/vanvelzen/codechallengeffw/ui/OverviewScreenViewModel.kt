@@ -29,7 +29,7 @@ open class OverviewScreenViewModel(
 
     private fun fetchStarWarsCharacters() {
         viewModelScope.launch {
-            val response = repository.getPeople()
+            val response = repository.getStarWarsCharacters()
             _uiState.update {
                 when (response) {
                     is Response.Error -> UiStateOverview.Error(response.errorMessage)

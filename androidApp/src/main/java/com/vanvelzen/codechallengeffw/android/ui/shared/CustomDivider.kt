@@ -1,4 +1,4 @@
-package com.vanvelzen.codechallengeffw.android.ui
+package com.vanvelzen.codechallengeffw.android.ui.shared
 
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme

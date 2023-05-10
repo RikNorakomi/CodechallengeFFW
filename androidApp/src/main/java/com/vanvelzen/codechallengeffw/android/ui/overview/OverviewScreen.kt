@@ -13,7 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.vanvelzen.codechallengeffw.android.ui.CustomDivider
+import com.vanvelzen.codechallengeffw.android.ui.shared.CustomDivider
 import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderEmptyState
 import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderErrorState
 import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderLoadingState

@@ -7,21 +7,26 @@ import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 import com.vanvelzen.codechallengeffw.models.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 open class OverviewScreenViewModel(
     private val repository: StarWarsRepository,
-    log: Logger
+    private val log: Logger
 ) : ViewModel() {
-
-    init {
-        log.e { "StarWarsViewModel instantiation!" }
-    }
 
     private val _uiState: MutableStateFlow<UiStateOverview> =
         MutableStateFlow(UiStateOverview.Loading)
     val uiState: StateFlow<UiStateOverview> = _uiState
+
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean>
+        get() = _isRefreshing.asStateFlow()
+
+    init {
+        log.e { "StarWarsViewModel instantiation!" }
+    }
 
     init {
         fetchStarWarsCharacters()
@@ -40,7 +45,8 @@ open class OverviewScreenViewModel(
     }
 
     fun onPullToRefresh() {
-        TODO("Not yet implemented")
+        log.v { "Pull to refresh triggered" }
+        fetchStarWarsCharacters()
     }
 }
 

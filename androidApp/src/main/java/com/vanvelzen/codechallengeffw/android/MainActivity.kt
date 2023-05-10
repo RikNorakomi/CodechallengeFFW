@@ -99,7 +99,7 @@ fun StarWarsApp(log: Logger) {
 
             NavHost(navController = navController, startDestination = Routes.OverviewScreen) {
                 composable(route = Routes.OverviewScreen) {
-                    OverViewScreen() { person ->
+                    OverViewScreen { person ->
                         topBarViewModel.title = person.name
                         navController.navigate("${Routes.DetailScreen}/${person.id}")
                     }

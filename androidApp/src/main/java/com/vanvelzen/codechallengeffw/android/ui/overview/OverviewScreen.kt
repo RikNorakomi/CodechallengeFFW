@@ -2,6 +2,7 @@ package com.vanvelzen.codechallengeffw.android.ui.overview
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -9,8 +10,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -37,6 +42,7 @@ import com.vanvelzen.codechallengeffw.data.DummyDataSwapi
 import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 import com.vanvelzen.codechallengeffw.ui.OverviewScreenViewModel
 import com.vanvelzen.codechallengeffw.ui.UiStateOverview
+import org.koin.androidx.compose.getViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -54,26 +60,40 @@ fun OverViewScreen(
             if (characters.isEmpty()) PlaceholderEmptyState()
             else CharacterList(
                 people = characters,
-                onItemClick = { people -> onItemClick(people) }
+                onItemClick = { people -> onItemClick(people) },
+                viewModel = viewModel
             )
         }
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CharacterList(people: List<StarWarsCharacter>, onItemClick: (StarWarsCharacter) -> Unit) {
-    LazyColumn(
-        modifier = Modifier
-            .padding(all = 8.dp)
-            .padding(top = 20.dp)
-    ) {
-        items(people) { character ->
-            StarWarsCharacterRow(character) {
-                onItemClick(it)
+fun CharacterList(
+    people: List<StarWarsCharacter>,
+    onItemClick: (StarWarsCharacter) -> Unit,
+    viewModel: OverviewScreenViewModel
+) {
+
+    val refreshing by viewModel.isRefreshing.collectAsState()
+    val pullRefreshState = rememberPullRefreshState(refreshing, { viewModel.onPullToRefresh() })
+
+    Box(Modifier.pullRefresh(pullRefreshState)){
+        LazyColumn(
+            modifier = Modifier
+                .padding(all = 8.dp)
+                .padding(top = 20.dp)
+        ) {
+            items(people) { character ->
+                StarWarsCharacterRow(character) {
+                    onItemClick(it)
+                }
+                CustomDivider()
             }
-            CustomDivider()
         }
+        PullRefreshIndicator(refreshing, pullRefreshState, Modifier.align(Alignment.TopCenter))
     }
+
 }
 
 @Composable
@@ -82,7 +102,6 @@ fun StarWarsCharacterRow(character: StarWarsCharacter, onClick: (StarWarsCharact
     Row(
         Modifier
             .clickable { onClick(character) }
-//            .height(50.dp)
             .padding(10.dp)
     ) {
         AsyncImage(
@@ -105,18 +124,16 @@ fun StarWarsCharacterRow(character: StarWarsCharacter, onClick: (StarWarsCharact
             overflow = TextOverflow.Ellipsis,
             maxLines = 2,
             fontSize = 18.sp,
-            modifier = Modifier.weight(1F).padding(horizontal = 20.dp).align(CenterVertically)
+            modifier = Modifier
+                .weight(1F)
+                .padding(horizontal = 20.dp)
+                .align(CenterVertically)
         )
     }
-}
-
-@Composable // TODO
-fun ThumbnailIcon(people: StarWarsCharacter) {
-
 }
 
 @Preview
 @Composable
 fun MainScreenContentPreview_Success() {
-    CharacterList(people = DummyDataSwapi.items, onItemClick = {})
+    CharacterList(people = DummyDataSwapi.items, onItemClick = {}, viewModel = getViewModel())
 }

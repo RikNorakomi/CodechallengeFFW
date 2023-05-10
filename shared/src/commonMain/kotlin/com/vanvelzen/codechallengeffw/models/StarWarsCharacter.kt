@@ -10,7 +10,7 @@ data class StarWarsCharacter(
     val edited: String = "",
     val created: String = "",
     val mass: String = "",
-    val imageUrl: String = "",
+    var imageUrl: String? = null,
     val films: List<String> = emptyList(),
     val species: List<String> = emptyList(),
     val vehicles: List<String> = emptyList(),

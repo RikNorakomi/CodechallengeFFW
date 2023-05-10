@@ -58,16 +58,6 @@ fun DetailScreen(
             DetailScreenContent(person = character)
         }
     }
-//
-//    // TODO Use SCSI for state to code gracefully handle various states
-//    // TODO: Add more graceful impl with sealed classes
-//    if (state.error != null) PlaceholderErrorState(error = state.error!!)
-//    else if (state.isLoading) PlaceholderLoadingState(MaterialTheme.colors.onSurface)
-//    else state.character?.let {
-//        DetailScreenContent(person = it)
-//        log.v { "Detail screen for Star Wars character with name:${state.character?.name}" }
-//    }
-
 }
 
 @OptIn(ExperimentalMaterialApi::class)

@@ -14,6 +14,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
@@ -42,15 +43,18 @@ import com.vanvelzen.codechallengeffw.data.DummyDataSwapi
 import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 import com.vanvelzen.codechallengeffw.ui.OverviewScreenViewModel
 import com.vanvelzen.codechallengeffw.ui.UiStateOverview
-import org.koin.androidx.compose.getViewModel
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun OverViewScreen(
     onItemClick: (StarWarsCharacter) -> Unit
 ) {
     val viewModel: OverviewScreenViewModel = koinViewModel()
     val state by viewModel.uiState.collectAsState()
+
+    val refreshing by viewModel.isRefreshing.collectAsState()
+    val pullRefreshState = rememberPullRefreshState(refreshing, { viewModel.onPullToRefresh() })
 
     when (state) {
         is UiStateOverview.Error -> PlaceholderErrorState(error = (state as UiStateOverview.Error).errorMessage)
@@ -61,7 +65,8 @@ fun OverViewScreen(
             else CharacterList(
                 people = characters,
                 onItemClick = { people -> onItemClick(people) },
-                viewModel = viewModel
+                refreshing = refreshing,
+                pullRefreshState = pullRefreshState,
             )
         }
     }
@@ -72,11 +77,9 @@ fun OverViewScreen(
 fun CharacterList(
     people: List<StarWarsCharacter>,
     onItemClick: (StarWarsCharacter) -> Unit,
-    viewModel: OverviewScreenViewModel
+    refreshing: Boolean,
+    pullRefreshState: PullRefreshState
 ) {
-
-    val refreshing by viewModel.isRefreshing.collectAsState()
-    val pullRefreshState = rememberPullRefreshState(refreshing, { viewModel.onPullToRefresh() })
 
     Box(Modifier.pullRefresh(pullRefreshState)){
         LazyColumn(
@@ -132,8 +135,16 @@ fun StarWarsCharacterRow(character: StarWarsCharacter, onClick: (StarWarsCharact
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Preview
 @Composable
 fun MainScreenContentPreview_Success() {
-    CharacterList(people = DummyDataSwapi.items, onItemClick = {}, viewModel = getViewModel())
+    val refreshing = false
+    val pullRefreshState = rememberPullRefreshState(refreshing, {  })
+    CharacterList(
+        people = DummyDataSwapi.items,
+        onItemClick = {},
+        refreshing = refreshing,
+        pullRefreshState = pullRefreshState
+    )
 }

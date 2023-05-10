@@ -18,11 +18,9 @@ import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderEmptyState
 import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderErrorState
 import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderLoadingState
 import com.vanvelzen.codechallengeffw.data.DummyDataSwapi
-import com.vanvelzen.codechallengeffw.data.dto.People
-import com.vanvelzen.codechallengeffw.data.dto.PeopleWithImages
 import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 import com.vanvelzen.codechallengeffw.ui.OverviewScreenViewModel
-import com.vanvelzen.codechallengeffw.ui.UiStateOverview2
+import com.vanvelzen.codechallengeffw.ui.UiStateOverview
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -33,10 +31,10 @@ fun OverViewScreen(
     val state by viewModel.uiState.collectAsState()
 
     when (state){
-        is UiStateOverview2.Error -> PlaceholderErrorState(error = (state as UiStateOverview2.Error).errorMessage)
-        is UiStateOverview2.Loading -> PlaceholderLoadingState()
-        is UiStateOverview2.Success -> {
-            val characters = (state as UiStateOverview2.Success).people
+        is UiStateOverview.Error -> PlaceholderErrorState(error = (state as UiStateOverview.Error).errorMessage)
+        is UiStateOverview.Loading -> PlaceholderLoadingState()
+        is UiStateOverview.Success -> {
+            val characters = (state as UiStateOverview.Success).people
             if (characters.isEmpty()) PlaceholderEmptyState()
             else CharacterList(
                 people = characters,

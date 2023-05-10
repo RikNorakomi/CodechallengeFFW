@@ -33,7 +33,7 @@ open class DetailScreenViewModel(
                 return@launch
             }
 
-            val response = repository.getCharacterDetailsById(characterId)
+            val response = repository.getCharacterDetails(characterId)
             val errorMessage: String? = null
             _uiState.update {
                 when (response) {

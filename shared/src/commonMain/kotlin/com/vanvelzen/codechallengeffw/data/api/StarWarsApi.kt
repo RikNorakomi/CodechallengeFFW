@@ -1,9 +1,8 @@
 package com.vanvelzen.codechallengeffw.data.api
 
-import com.vanvelzen.codechallengeffw.data.dto.People
-import com.vanvelzen.codechallengeffw.data.dto.PeopleResponse
+import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 
 interface StarWarsApi {
-    suspend fun getPeople(): PeopleResponse
-    suspend fun getPersonById(id: String): People
+    suspend fun getPeople(): Response<List<StarWarsCharacter>>
+    suspend fun getPersonById(id: String): Response<StarWarsCharacter>
 }

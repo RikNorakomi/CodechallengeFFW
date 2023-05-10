@@ -99,7 +99,7 @@ fun DetailScreenContent(character: StarWarsCharacter) {
                 .align(CenterHorizontally)
                 .padding(top = 20.dp),
             contentDescription = character.name,
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.Inside,
             onSuccess = { showShimmer.value = false },
         )
 

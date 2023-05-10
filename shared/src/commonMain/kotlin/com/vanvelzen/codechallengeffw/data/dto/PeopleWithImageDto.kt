@@ -1,6 +1,5 @@
 package com.vanvelzen.codechallengeffw.data.dto
 
-import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

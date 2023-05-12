@@ -5,6 +5,7 @@ import com.vanvelzen.codechallengeffw.data.remote.Response
 import com.vanvelzen.codechallengeffw.data.repository.StarWarsRepository
 import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 import com.vanvelzen.codechallengeffw.models.ViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,35 +30,28 @@ open class OverviewScreenViewModel(
     }
 
     private fun fetchStarWarsCharacters() {
-//        if(!isRefreshing.value){
-//            _isRefreshing.value = true
-            viewModelScope.launch {
-                val response = repository.getStarWarsCharacters()
-                _uiState.update {
-                    when (response) {
-                        is Response.Error -> UiStateOverview.Error(response.errorMessage)
-                        is Response.Success -> UiStateOverview.Success(response.data)
-                    }
+        viewModelScope.launch {
+            val response = repository.getStarWarsCharacters()
+            _uiState.update {
+                when (response) {
+                    is Response.Error -> UiStateOverview.Error(response.errorMessage)
+                    is Response.Success -> UiStateOverview.Success(response.data, response.canLoadMore)
                 }
-//                _isRefreshing.value = false
-//            }
+            }
         }
-
     }
 
     fun onPullToRefresh() {
-        log.v { "Pull to refresh triggered" }
         fetchStarWarsCharacters()
     }
 
     fun onEndOfListReached() {
-        log.e { "End of list reached!" }
         fetchStarWarsCharacters()
     }
 }
 
 sealed class UiStateOverview {
-    data class Success(val people: List<StarWarsCharacter>) : UiStateOverview()
+    data class Success(val people: List<StarWarsCharacter>, val canLoadMore: Boolean) : UiStateOverview()
     data class Error(val errorMessage: String) : UiStateOverview()
     object Loading : UiStateOverview()
 }

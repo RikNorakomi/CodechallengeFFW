@@ -10,6 +10,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
+/**
+ * Code from: https://medium.com/@m.derakhshan/how-to-implement-the-shimmer-effect-using-jetpack-compose-fc0e81e47747
+ */
 @Composable
 fun shimmerBrush(showShimmer: Boolean = true,targetValue:Float = 1000f): Brush {
     return if (showShimmer) {

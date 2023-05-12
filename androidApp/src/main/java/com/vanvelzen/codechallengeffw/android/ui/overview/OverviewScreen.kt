@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -34,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,7 +46,6 @@ import com.vanvelzen.codechallengeffw.android.ui.shared.CustomDivider
 import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderEmptyState
 import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderErrorState
 import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderLoadingState
-import com.vanvelzen.codechallengeffw.android.ui.shared.isScrolledToEnd
 import com.vanvelzen.codechallengeffw.android.ui.shared.shimmerBrush
 import com.vanvelzen.codechallengeffw.data.DummyDataSwapi
 import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
@@ -74,12 +73,14 @@ fun OverViewScreen(
         is Success -> {
             endOfListReached = false
             val characters = (state as Success).people
+            val canLoadMore = (state as Success).canLoadMore
             if (characters.isEmpty()) PlaceholderEmptyState()
             else CharacterList(
                 people = characters,
                 onItemClick = { people -> onItemClick(people) },
                 refreshing = refreshing,
                 pullRefreshState = pullRefreshState,
+                canLoadMore = canLoadMore,
                 onEndOfListReached = {
                     if (!endOfListReached) {
                         endOfListReached = true
@@ -99,13 +100,14 @@ fun CharacterList(
     refreshing: Boolean,
     pullRefreshState: PullRefreshState,
     onEndOfListReached: () -> Unit,
+    canLoadMore: Boolean,
 ) {
     val listState = rememberLazyListState()
-//    if (!listState.canScrollForward) onEndOfListReached()
+    if (!listState.canScrollForward && canLoadMore) onEndOfListReached()
 
     Box(Modifier.pullRefresh(pullRefreshState)) {
-        println("can scroll fowward: "+listState.canScrollForward)
         LazyColumn(
+            state = listState,
             modifier = Modifier
                 .padding(all = 8.dp)
                 .padding(top = 20.dp)
@@ -116,8 +118,11 @@ fun CharacterList(
                 }
                 CustomDivider()
             }
-            item {
-                Row(modifier = Modifier.padding(8.dp).fillMaxWidth(),
+            if (canLoadMore) item {
+                Row(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
                     CircularProgressIndicator(
@@ -146,12 +151,19 @@ fun StarWarsCharacterRow(character: StarWarsCharacter, onClick: (StarWarsCharact
                 .build(),
             modifier = Modifier
                 .clip(CircleShape)
-                .background(shimmerBrush(targetValue = 1300f, showShimmer = showShimmer.value))
+                .background(color = Color.DarkGray)
+                .background(
+                    shimmerBrush(
+                        targetValue = 1300f,
+                        showShimmer = showShimmer.value
+                    )
+                )
                 .width(50.dp)
                 .height(50.dp),
             contentDescription = character.name,
             contentScale = ContentScale.Crop,
             onSuccess = { showShimmer.value = false },
+            onError = {showShimmer.value = false },
         )
         Text(
             text = character.name,
@@ -178,6 +190,7 @@ fun MainScreenContentPreview_Success() {
         onItemClick = {},
         refreshing = refreshing,
         pullRefreshState = pullRefreshState,
-        onEndOfListReached = {}
+        onEndOfListReached = {},
+        canLoadMore = true,
     )
 }

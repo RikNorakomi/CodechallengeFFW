@@ -17,10 +17,8 @@ import kotlinx.coroutines.withContext
 class StarWarsRepository(
     private val starWarsApi: StarWarsApi,
     private val starWarsWithImagesApi: StarWarsWithImagesApi,
-    log: Logger
+    private val log: Logger
 ) {
-
-    private val log = log.withTag("StarWarsRepository")
 
     internal data class LocalCacheMock (
         val cachedCharacters: MutableSet<StarWarsCharacter> = mutableSetOf(),
@@ -38,14 +36,13 @@ class StarWarsRepository(
             // If there is no next page to load on api return cached data
             with (localCacheMock){
                 if (!hasNextPage){
-                    return@withContext Response.Success(cachedCharacters.toList())
+                    return@withContext Response.Success(cachedCharacters.toList(), false)
                 }
             }
 
             // Else determine which page to load
             val pageToLoad = (localCacheMock.lastCachedPage?.plus(1)) ?: StarWarsApi.FIRST_PAGE_ID
-
-            log.e { "LOADING PAGE $pageToLoad" }
+            log.v { "Fetching page: $pageToLoad" }
 
             val deferredList = listOf(
                 this.async { starWarsApi.getPeople(pageToLoad) },
@@ -90,7 +87,7 @@ class StarWarsRepository(
                 log.v { "Local cache has ${cachedCharacters.size} characters. hasNextPage:${hasNextPage}" }
             }
 
-            return@withContext Response.Success(localCacheMock.cachedCharacters.toList())
+            return@withContext Response.Success(localCacheMock.cachedCharacters.toList(), localCacheMock.hasNextPage)
         }
     }
 

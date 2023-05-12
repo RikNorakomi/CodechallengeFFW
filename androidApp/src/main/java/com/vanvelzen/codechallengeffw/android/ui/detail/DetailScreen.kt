@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -33,21 +32,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Logger
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.vanvelzen.codechallengeffw.android.R
 import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderErrorState
 import com.vanvelzen.codechallengeffw.android.ui.shared.PlaceholderLoadingState
 import com.vanvelzen.codechallengeffw.android.ui.shared.shimmerBrush
 import com.vanvelzen.codechallengeffw.data.DummyDataSwapi
 import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 import com.vanvelzen.codechallengeffw.ui.DetailScreenViewModel
-import com.vanvelzen.codechallengeffw.ui.UiStateDetail2
+import com.vanvelzen.codechallengeffw.ui.UiStateDetail2.Error
+import com.vanvelzen.codechallengeffw.ui.UiStateDetail2.Loading
+import com.vanvelzen.codechallengeffw.ui.UiStateDetail2.Success
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -66,10 +64,10 @@ fun DetailScreen(
     }
 
     when (state){
-        is UiStateDetail2.Error -> PlaceholderErrorState(error = (state as UiStateDetail2.Error).errorMessage)
-        is UiStateDetail2.Loading -> PlaceholderLoadingState(MaterialTheme.colors.onSurface)
-        is UiStateDetail2.Success -> {
-            val character = (state as UiStateDetail2.Success).character
+        is Error -> PlaceholderErrorState(error = (state as Error).errorMessage)
+        is Loading -> PlaceholderLoadingState(color = MaterialTheme.colors.onSurface)
+        is Success -> {
+            val character = (state as Success).character
             log.e { "Detail screen for Star Wars character with name:${character.name} url:${character.imageUrl}" }
             DetailScreenContent(character = character)
         }

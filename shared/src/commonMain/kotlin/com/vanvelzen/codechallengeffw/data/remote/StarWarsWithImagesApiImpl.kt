@@ -1,23 +1,16 @@
-package com.vanvelzen.codechallengeffw.data.api
+package com.vanvelzen.codechallengeffw.data.remote
 
-import com.vanvelzen.codechallengeffw.data.dto.People
-import com.vanvelzen.codechallengeffw.data.dto.PeopleResponse
 import com.vanvelzen.codechallengeffw.data.dto.PeopleWithImages
-import com.vanvelzen.codechallengeffw.data.dto.toStarWarsCharacter
-import com.vanvelzen.codechallengeffw.data.dto.toStarWarsCharacters
-import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.HttpTimeout
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.http.encodedPath
 import io.ktor.http.takeFrom
-import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -27,17 +20,21 @@ import co.touchlab.kermit.Logger as KermitLogger
 import io.ktor.client.plugins.logging.Logger as KtorLogger
 
 /**
- * Client for the https://swapi.dev/ Star Wars api
+ * Client for the https://rawcdn.githack.com/akabab/starwars-api/0.2.1/api Star Wars api
+ * In comparison to the Swapi api this api provides image urls for all the Star Wars characters
  */
-class StarWarsApiImpl(
+class StarWarsWithImagesApiImpl(
     private val log: KermitLogger,
     engine: HttpClientEngine,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.Default
-) : StarWarsApi {
+) : StarWarsWithImagesApi {
 
     companion object {
-        const val BASE_URL = "https://swapi.dev/"
+        const val BASE_URL = "https://rawcdn.githack.com/"
+        const val PATH_TO_API = "akabab/starwars-api/0.2.1/api"
     }
+
+    private val json = Json { ignoreUnknownKeys = true }
 
     private val client = HttpClient(engine) {
         expectSuccess = true
@@ -49,11 +46,7 @@ class StarWarsApiImpl(
                     log.v { message }
                 }
             }
-            level = LogLevel.INFO
-        }
-
-        install(ContentNegotiation) {
-            json()
+            level = LogLevel.ALL
         }
 
         install(HttpTimeout) {
@@ -64,7 +57,6 @@ class StarWarsApiImpl(
         }
     }
 
-
     private fun HttpRequestBuilder.people(path: String) {
         url {
             takeFrom(BASE_URL)
@@ -72,16 +64,18 @@ class StarWarsApiImpl(
         }
     }
 
-    override suspend fun getPeople(): Response<List<StarWarsCharacter>> {
+    override suspend fun getAllCharacters(): Response<List<PeopleWithImages>> {
         return withContext(ioDispatcher) {
             log.d { "Fetching all characters." }
             try {
 
-                val response: PeopleResponse = client.get {
-                    people("api/people")
-                }.body()
+                val stringBody: String = client
+                    .get { people("${PATH_TO_API}/all.json") }
+                    .body()
 
-                Response.Success(response.toStarWarsCharacters())
+                val response = json.decodeFromString<List<PeopleWithImages>>(stringBody)
+
+                Response.Success(response)
             } catch (e: Exception) {
                 // For the sake of simplicity for this code challenge we'll just return
                 Response.Error(e.toString())
@@ -89,15 +83,15 @@ class StarWarsApiImpl(
         }
     }
 
-    override suspend fun getPersonById(id: String): Response<StarWarsCharacter> {
+    override suspend fun getCharacterById(id: String): Response<PeopleWithImages> {
         return withContext(ioDispatcher) {
             log.d { "Fetching character details for person with id:$id" }
             try {
-                val response: People = client.get {
-                    people("api/people/${id}")
-                }.body()
+                val response: PeopleWithImages = client
+                    .get { people("${PATH_TO_API}/${id}.json") }
+                    .body()
 
-                Response.Success(response.toStarWarsCharacter())
+                Response.Success(response)
             } catch (e: Exception) {
                 // For the sake of simplicity for this code challenge we'll just return
                 Response.Error(e.toString())
@@ -105,3 +99,6 @@ class StarWarsApiImpl(
         }
     }
 }
+
+
+

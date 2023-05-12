@@ -35,7 +35,7 @@ Multiplatform Coroutines/ViewModel/ImageLoading solutions:
 - Library to share Kotlin ViewModels with SwiftUI: https://github.com/rickclephas/KMM-ViewModel
 - Compose Multiplatform Image Loader: https://github.com/qdsfdhvh/compose-imageloader
 - KMM paging: https://github.com/cashapp/multiplatform-paging
-- 
+
 Logging:
 - Kermit by Touchlab is a Kotlin Multiplatform centralized logging utility: https://kermit.touchlab.co/docs/
 

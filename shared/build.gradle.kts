@@ -51,6 +51,8 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+//                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+//                implementation("app.cash.turbine:turbine:0.13.0")
             }
         }
         val androidMain by getting {

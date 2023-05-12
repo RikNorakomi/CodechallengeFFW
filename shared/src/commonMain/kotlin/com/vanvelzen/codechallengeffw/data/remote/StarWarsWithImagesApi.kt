@@ -1,4 +1,4 @@
-package com.vanvelzen.codechallengeffw.data.api
+package com.vanvelzen.codechallengeffw.data.remote
 
 import com.vanvelzen.codechallengeffw.data.dto.PeopleWithImages
 

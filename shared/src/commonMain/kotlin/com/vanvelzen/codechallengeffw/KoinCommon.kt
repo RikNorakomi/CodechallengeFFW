@@ -3,10 +3,10 @@ package com.vanvelzen.codechallengeffw
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.StaticConfig
 import co.touchlab.kermit.platformLogWriter
-import com.vanvelzen.codechallengeffw.data.api.StarWarsApi
-import com.vanvelzen.codechallengeffw.data.api.StarWarsWithImagesApi
-import com.vanvelzen.codechallengeffw.data.api.StarWarsApiImpl
-import com.vanvelzen.codechallengeffw.data.api.StarWarsWithImagesApiImpl
+import com.vanvelzen.codechallengeffw.data.remote.StarWarsApi
+import com.vanvelzen.codechallengeffw.data.remote.StarWarsWithImagesApi
+import com.vanvelzen.codechallengeffw.data.remote.StarWarsApiImpl
+import com.vanvelzen.codechallengeffw.data.remote.StarWarsWithImagesApiImpl
 import com.vanvelzen.codechallengeffw.data.repository.StarWarsRepository
 import org.koin.core.KoinApplication
 import org.koin.core.component.KoinComponent

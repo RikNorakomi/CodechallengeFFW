@@ -1,7 +1,7 @@
 package com.vanvelzen.codechallengeffw.ui
 
 import co.touchlab.kermit.Logger
-import com.vanvelzen.codechallengeffw.data.api.Response
+import com.vanvelzen.codechallengeffw.data.remote.Response
 import com.vanvelzen.codechallengeffw.data.repository.StarWarsRepository
 import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 import com.vanvelzen.codechallengeffw.models.ViewModel
@@ -25,27 +25,33 @@ open class OverviewScreenViewModel(
         get() = _isRefreshing.asStateFlow()
 
     init {
-        log.e { "StarWarsViewModel instantiation!" }
-    }
-
-    init {
         fetchStarWarsCharacters()
     }
 
     private fun fetchStarWarsCharacters() {
-        viewModelScope.launch {
-            val response = repository.getStarWarsCharacters()
-            _uiState.update {
-                when (response) {
-                    is Response.Error -> UiStateOverview.Error(response.errorMessage)
-                    is Response.Success -> UiStateOverview.Success(response.data)
+//        if(!isRefreshing.value){
+//            _isRefreshing.value = true
+            viewModelScope.launch {
+                val response = repository.getStarWarsCharacters()
+                _uiState.update {
+                    when (response) {
+                        is Response.Error -> UiStateOverview.Error(response.errorMessage)
+                        is Response.Success -> UiStateOverview.Success(response.data)
+                    }
                 }
-            }
+//                _isRefreshing.value = false
+//            }
         }
+
     }
 
     fun onPullToRefresh() {
         log.v { "Pull to refresh triggered" }
+        fetchStarWarsCharacters()
+    }
+
+    fun onEndOfListReached() {
+        log.e { "End of list reached!" }
         fetchStarWarsCharacters()
     }
 }

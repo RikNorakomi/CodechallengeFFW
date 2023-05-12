@@ -1,10 +1,12 @@
 package com.vanvelzen.codechallengeffw.data.repository
 
 import co.touchlab.kermit.Logger
-import com.vanvelzen.codechallengeffw.data.api.Response
-import com.vanvelzen.codechallengeffw.data.api.StarWarsApi
-import com.vanvelzen.codechallengeffw.data.api.StarWarsWithImagesApi
+import com.vanvelzen.codechallengeffw.data.dto.PeopleResponse
+import com.vanvelzen.codechallengeffw.data.remote.Response
+import com.vanvelzen.codechallengeffw.data.remote.StarWarsApi
+import com.vanvelzen.codechallengeffw.data.remote.StarWarsWithImagesApi
 import com.vanvelzen.codechallengeffw.data.dto.PeopleWithImages
+import com.vanvelzen.codechallengeffw.data.dto.toStarWarsCharacters
 import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,13 +22,33 @@ class StarWarsRepository(
 
     private val log = log.withTag("StarWarsRepository")
 
-    private var cachedCharacters = listOf<StarWarsCharacter>()
+    internal data class LocalCacheMock (
+        val cachedCharacters: MutableSet<StarWarsCharacter> = mutableSetOf(),
+        var lastCachedPage: Int? = null,
+        var hasNextPage: Boolean = true,
+    )
+
+    private val localCacheMock = LocalCacheMock()
+    private val cachedCharactersWithImages = mutableListOf<PeopleWithImages>()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     suspend fun getStarWarsCharacters(): Response<List<StarWarsCharacter>> {
         return withContext(Dispatchers.Main) {
+
+            // If there is no next page to load on api return cached data
+            with (localCacheMock){
+                if (!hasNextPage){
+                    return@withContext Response.Success(cachedCharacters.toList())
+                }
+            }
+
+            // Else determine which page to load
+            val pageToLoad = (localCacheMock.lastCachedPage?.plus(1)) ?: StarWarsApi.FIRST_PAGE_ID
+
+            log.e { "LOADING PAGE $pageToLoad" }
+
             val deferredList = listOf(
-                this.async { starWarsApi.getPeople() },
+                this.async { starWarsApi.getPeople(pageToLoad) },
                 this.async { getCharactersWithImageUrl() },
             )
 
@@ -41,7 +63,8 @@ class StarWarsRepository(
                 log.e { errorMsg }
                 return@withContext Response.Error(errorMessage = errorMsg)
             }
-            var characters = (responseCharacterDetails as Response.Success).data as List<StarWarsCharacter>
+            val charactersResponse = (responseCharacterDetails as Response.Success).data as PeopleResponse
+            var characters = charactersResponse.toStarWarsCharacters()
 
             // When both calls return successfully add imageUrl to data
             if (responseImages is Response.Success) {
@@ -60,16 +83,20 @@ class StarWarsRepository(
                 }
             } else log.e { "Getting image urls from the Star Wars api with images failed!" }
 
-            cachedCharacters = characters
-            log.e { "First character url: ${characters.get(0).imageUrl}" }
+            with (localCacheMock){
+                cachedCharacters.addAll(characters)
+                lastCachedPage = pageToLoad
+                hasNextPage = !charactersResponse.next.isNullOrEmpty()
+                log.v { "Local cache has ${cachedCharacters.size} characters. hasNextPage:${hasNextPage}" }
+            }
 
-            return@withContext Response.Success(characters)
+            return@withContext Response.Success(localCacheMock.cachedCharacters.toList())
         }
     }
 
     suspend fun getCharacterDetails(id: String): Response<StarWarsCharacter> {
-        val cachedCharacter = cachedCharacters.firstOrNull() { it.id == id }
-        if (cachedCharacter == null){
+        val cachedCharacter = localCacheMock.cachedCharacters.firstOrNull { it.id == id }
+        if (cachedCharacter == null) {
             log.e { "Unable to find character with id: $id in cache. Should never happen!" }
         } else return Response.Success(cachedCharacter)
 
@@ -77,7 +104,19 @@ class StarWarsRepository(
     }
 
     private suspend fun getCharactersWithImageUrl(): Response<List<PeopleWithImages>> =
-        starWarsWithImagesApi.getAllCharacters()
+        if (cachedCharactersWithImages.isNotEmpty()) {
+            log.v { "Returning a cached response for getCharactersWithImageUrl() for ${cachedCharactersWithImages.size} characters." }
+            Response.Success(cachedCharactersWithImages)
+        } else {
+            val response = starWarsWithImagesApi.getAllCharacters()
+            if (response is Response.Success){
+                if (response.data.isNotEmpty()){
+                    cachedCharactersWithImages.addAll(response.data)
+                }
+            }
+            response
+        }
+
 
     suspend fun getCharacterDetailsById(id: String): Response<PeopleWithImages> =
         starWarsWithImagesApi.getCharacterById(id)

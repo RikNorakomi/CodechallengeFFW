@@ -1,7 +1,17 @@
 ## TODO: create readme
 
-## Resources
+## Testing
 
+### Unit tests
+For unit tests the following libraries are used:
+- Turbine (CashApp) - A small testing library for kotlinx.coroutines Flow: https://github.com/cashapp/turbine
+- Kotlinx-coroutines-test - Utilities for efficiently testing coroutines: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/
+- MocKMP: A mocking processor for Kotlin Multiplatform: https://github.com/kosi-libs/MocKMP
+- https://medium.com/kodein-koders/mockmp-a-mocking-processor-for-kotlin-multiplatform-51957c484fe5
+
+### UI Tests
+
+## Resources
 Multiplatform Coroutines/ViewModel/ImageLoading solutions:
 - Library to use Kotlin Coroutines from Swift code in KMP apps: https://github.com/rickclephas/KMP-NativeCoroutines
 - Library to share Kotlin ViewModels with SwiftUI: https://github.com/rickclephas/KMM-ViewModel

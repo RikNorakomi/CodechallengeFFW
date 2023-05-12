@@ -1,8 +1,7 @@
 package com.vanvelzen.codechallengeffw.ui
 
 import co.touchlab.kermit.Logger
-import com.vanvelzen.codechallengeffw.data.api.Response
-import com.vanvelzen.codechallengeffw.data.dto.People
+import com.vanvelzen.codechallengeffw.data.remote.Response
 import com.vanvelzen.codechallengeffw.data.repository.StarWarsRepository
 import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 import com.vanvelzen.codechallengeffw.models.ViewModel

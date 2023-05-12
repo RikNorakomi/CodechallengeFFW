@@ -6,7 +6,7 @@ import com.vanvelzen.codechallengeffw.models.ViewModel
 class TopBarViewModel(log: Logger) : ViewModel() {
 
     init {
-        log.e { "TopBarViewModel instantiation!!" }
+        log.v { "TopBarViewModel instantiation!!" }
     }
 
     var title: String = ""

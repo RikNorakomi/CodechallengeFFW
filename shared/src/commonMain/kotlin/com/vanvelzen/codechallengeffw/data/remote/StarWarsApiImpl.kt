@@ -43,7 +43,7 @@ class StarWarsApiImpl(
             logger = object : KtorLogger {
                 override fun log(message: String) {
                     // delegates Ktor logs to the Multiplatform KermitLogger solution
-//                    log.v { message }
+                    log.v { message }
                 }
             }
             level = LogLevel.INFO

@@ -5,7 +5,7 @@ import com.vanvelzen.codechallengeffw.data.dto.PeopleResponse
 import com.vanvelzen.codechallengeffw.data.remote.Response
 import com.vanvelzen.codechallengeffw.data.remote.StarWarsApi
 import com.vanvelzen.codechallengeffw.data.remote.StarWarsWithImagesApi
-import com.vanvelzen.codechallengeffw.data.dto.PeopleWithImages
+import com.vanvelzen.codechallengeffw.data.dto.PeopleWithImagesDto
 import com.vanvelzen.codechallengeffw.data.dto.toStarWarsCharacters
 import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +27,7 @@ class StarWarsRepository(
     )
 
     private val localCacheMock = LocalCacheMock()
-    private val cachedCharactersWithImages = mutableListOf<PeopleWithImages>()
+    private val cachedCharactersWithImages = mutableListOf<PeopleWithImagesDto>()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     suspend fun getStarWarsCharacters(): Response<List<StarWarsCharacter>> {
@@ -65,7 +65,7 @@ class StarWarsRepository(
 
             // When both calls return successfully add imageUrl to data
             if (responseImages is Response.Success) {
-                val imagedCharacters = responseImages.data as List<PeopleWithImages>
+                val imagedCharacters = responseImages.data as List<PeopleWithImagesDto>
 
                 characters = characters.onEach { starWarsCharacter ->
                     starWarsCharacter.imageUrl = imagedCharacters
@@ -100,7 +100,7 @@ class StarWarsRepository(
         return starWarsApi.getPersonById(id)
     }
 
-    private suspend fun getCharactersWithImageUrl(): Response<List<PeopleWithImages>> =
+    private suspend fun getCharactersWithImageUrl(): Response<List<PeopleWithImagesDto>> =
         if (cachedCharactersWithImages.isNotEmpty()) {
             log.v { "Returning a cached response for getCharactersWithImageUrl() for ${cachedCharactersWithImages.size} characters." }
             Response.Success(cachedCharactersWithImages)
@@ -115,7 +115,7 @@ class StarWarsRepository(
         }
 
 
-    suspend fun getCharacterDetailsById(id: String): Response<PeopleWithImages> =
+    suspend fun getCharacterDetailsById(id: String): Response<PeopleWithImagesDto> =
         starWarsWithImagesApi.getCharacterById(id)
 
 }

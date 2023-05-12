@@ -43,9 +43,9 @@ import com.vanvelzen.codechallengeffw.android.ui.shared.shimmerBrush
 import com.vanvelzen.codechallengeffw.data.DummyDataSwapi
 import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 import com.vanvelzen.codechallengeffw.ui.DetailScreenViewModel
-import com.vanvelzen.codechallengeffw.ui.UiStateDetail2.Error
-import com.vanvelzen.codechallengeffw.ui.UiStateDetail2.Loading
-import com.vanvelzen.codechallengeffw.ui.UiStateDetail2.Success
+import com.vanvelzen.codechallengeffw.ui.UiStateDetail.Error
+import com.vanvelzen.codechallengeffw.ui.UiStateDetail.Loading
+import com.vanvelzen.codechallengeffw.ui.UiStateDetail.Success
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

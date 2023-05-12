@@ -23,17 +23,3 @@ data class People(
     @SerialName("eye_color") val eyeColor: String = "",
 )
 
-const val INVALID_CHARACTER_ID = "-1"
-fun People.getID(): String {
-    val substring = try {
-        var string = this.url
-        if (url.last().toString() == "/") {
-            string = url.dropLast(1)
-        }
-        string.substring(string.lastIndexOf("/") + 1, string.length)
-    } catch (e: Exception) {
-        INVALID_CHARACTER_ID
-    }
-    return substring
-}
-

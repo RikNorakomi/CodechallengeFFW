@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 open class OverviewScreenViewModel(
     private val repository: StarWarsRepository,
-    private val log: Logger
+    log: Logger
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<UiStateOverview> =
@@ -26,12 +26,14 @@ open class OverviewScreenViewModel(
         get() = _isRefreshing.asStateFlow()
 
     init {
+        log.v { "OverviewScreenViewModel instantiation!" }
         fetchStarWarsCharacters()
     }
 
     private fun fetchStarWarsCharacters() {
         viewModelScope.launch {
             val response = repository.getStarWarsCharacters()
+            _isRefreshing.value = false
             _uiState.update {
                 when (response) {
                     is Response.Error -> UiStateOverview.Error(response.errorMessage)
@@ -42,6 +44,7 @@ open class OverviewScreenViewModel(
     }
 
     fun onPullToRefresh() {
+        _isRefreshing.value = true
         fetchStarWarsCharacters()
     }
 

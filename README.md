@@ -5,7 +5,6 @@
 This app is created as part of a KMM Code Challenge (see description below). 
 Due to the unavailability of Apple hardware only the Android and commonMain side of the KMM project has been implemented, but where possible multiplatform solutions have been created so future sharing code with iOS would be easier.
 
-
 ## Swapi AND akabab/starwars APIs
 2 APIs have been used for fetching Star Wars related data as the Swapi api doesn't contain any information on image url.
 If found a second Star Wars "API" source that returned a list of the same Star Wars characters as Swapi but where there where image urls available for most of the characters.
@@ -19,16 +18,17 @@ For now the [StarWarsRepository] makes use of a simple in memory cache to unnece
 Due to time constraints I have also opted for creating a simple paginating mechanism over trying to implement something like the Paging3 library [see StarWarsRepository & The OverviewScreen composable]
 
 ## Unit & UI tests
-TODO: not yet implemented
+TODO: not yet implemented: Looking into MocKMP for a multiplatform solution: https://github.com/kosi-libs/MocKMP
 
-## Shared code
-Shared ViewModel, Networking & Repository implementations are available in the [commonMain] package.
-Ktor has been used for a shared network implementation.
+## Shared code / multiplatform solutions
+- Shared ViewModel, Networking & Repository implementations are available in the [commonMain] package.
+- Ktor has been used for a shared network implementation.
+- kotlinx.serialization for multiplatform approach to de/serialization
+- Touchlab's Kermit Logger used for multiplatform solution to logging
 
 ### Android specific code
 - Compose UI & Routing are done from the Android package
 - Coil is used for Image loading
-
 
 # The Code challenge
 

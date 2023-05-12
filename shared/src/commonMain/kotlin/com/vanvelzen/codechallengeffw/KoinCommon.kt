@@ -1,13 +1,16 @@
 package com.vanvelzen.codechallengeffw
 
 import co.touchlab.kermit.Logger
+import co.touchlab.kermit.Logger.Companion.tag
 import co.touchlab.kermit.StaticConfig
 import co.touchlab.kermit.platformLogWriter
+import com.vanvelzen.codechallengeffw.data.remote.KtorClient
 import com.vanvelzen.codechallengeffw.data.remote.StarWarsApi
 import com.vanvelzen.codechallengeffw.data.remote.StarWarsWithImagesApi
 import com.vanvelzen.codechallengeffw.data.remote.StarWarsApiImpl
 import com.vanvelzen.codechallengeffw.data.remote.StarWarsWithImagesApiImpl
 import com.vanvelzen.codechallengeffw.data.repository.StarWarsRepository
+import io.ktor.client.HttpClient
 import org.koin.core.KoinApplication
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -40,6 +43,12 @@ fun initKoin(appModule: Module): KoinApplication {
 }
 
 private val coreModule = module {
+    single<HttpClient>{
+        KtorClient(
+            get { parametersOf("KtorClient") },
+            get()
+        ).client
+    }
     single<StarWarsApi> {
         StarWarsApiImpl(
             get { parametersOf("StarWarsApiImpl") },

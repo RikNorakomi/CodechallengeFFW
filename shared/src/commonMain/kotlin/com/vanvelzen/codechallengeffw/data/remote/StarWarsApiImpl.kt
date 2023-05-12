@@ -28,39 +28,13 @@ import io.ktor.client.plugins.logging.Logger as KtorLogger
  */
 class StarWarsApiImpl(
     private val log: KermitLogger,
-    engine: HttpClientEngine,
+    private val client: HttpClient,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) : StarWarsApi {
 
     companion object {
         const val BASE_URL = "https://swapi.dev/"
     }
-
-    private val client = HttpClient(engine) {
-        expectSuccess = true
-
-        install(Logging) {
-            logger = object : KtorLogger {
-                override fun log(message: String) {
-                    // delegates Ktor logs to the Multiplatform KermitLogger solution
-                    log.v { message }
-                }
-            }
-            level = LogLevel.INFO
-        }
-
-        install(ContentNegotiation) {
-            json()
-        }
-
-        install(HttpTimeout) {
-            val timeout = 30000L
-            connectTimeoutMillis = timeout
-            requestTimeoutMillis = timeout
-            socketTimeoutMillis = timeout
-        }
-    }
-
 
     private fun HttpRequestBuilder.people(path: String) {
         url {

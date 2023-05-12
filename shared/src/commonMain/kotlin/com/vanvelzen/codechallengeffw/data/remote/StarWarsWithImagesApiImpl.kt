@@ -5,12 +5,14 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.http.encodedPath
 import io.ktor.http.takeFrom
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -26,7 +28,7 @@ import io.ktor.client.plugins.logging.Logger as KtorLogger
  */
 class StarWarsWithImagesApiImpl(
     private val log: KermitLogger,
-    engine: HttpClientEngine,
+    private val client: HttpClient,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) : StarWarsWithImagesApi {
 
@@ -37,26 +39,7 @@ class StarWarsWithImagesApiImpl(
 
     private val json = Json { ignoreUnknownKeys = true }
 
-    private val client = HttpClient(engine) {
-        expectSuccess = true
 
-        install(Logging) {
-            logger = object : KtorLogger {
-                override fun log(message: String) {
-                    // delegates Ktor logs to the Multiplatform KermitLogger solution
-                    log.v { message }
-                }
-            }
-            level = LogLevel.ALL
-        }
-
-        install(HttpTimeout) {
-            val timeout = 30000L
-            connectTimeoutMillis = timeout
-            requestTimeoutMillis = timeout
-            socketTimeoutMillis = timeout
-        }
-    }
 
     private fun HttpRequestBuilder.people(path: String) {
         url {

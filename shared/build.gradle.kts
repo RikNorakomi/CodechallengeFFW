@@ -1,12 +1,9 @@
 plugins {
     kotlin("multiplatform")
-    kotlin("plugin.serialization") version "1.8.10"
-//    kotlin("plugin.serialization") version Versions.kotlinSerializationPlugin
+    kotlin("plugin.serialization") version Versions.kotlinVersion // https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.serialization
     id("com.android.library")
-    id("com.google.devtools.ksp") version "1.8.10-1.0.9"
-//    id("com.google.devtools.ksp") version Versions.KSP
+    id("com.google.devtools.ksp") version Versions.kotlinKSP // https://github.com/google/ksp/releases
     id("com.rickclephas.kmp.nativecoroutines") version "1.0.0-ALPHA-7"
-//    id("com.rickclephas.kmp.nativecoroutines") version Versions.nativeCoroutines
 }
 
 kotlin {

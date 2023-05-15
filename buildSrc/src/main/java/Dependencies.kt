@@ -3,16 +3,18 @@ object Versions {
     const val koin = "3.2.0"
     const val koinAndroidXViewModel = "2.2.3" // Latest versions: https://mvnrepository.com/artifact/org.koin/koin-androidx-viewmodel?repo=jcenter
     const val kotlinxSerialization = "1.5.0"
-    const val nativeCoroutines = "1.0.0-ALPHA-7"
-    const val kmmViewmodel = "1.0.0-ALPHA-7"
-    const val kotlinSerializationPlugin = "1.8.10"
-    const val KSP = "1.8.10-1.0.9" // https://github.com/google/ksp
-    const val ktor = "2.1.1"
+    const val kotlinVersion = "1.8.21"
+    const val kotlinKSP = "1.8.21-1.0.11" // https://github.com/google/ksp
+    const val nativeCoroutines = "1.0.0-ALPHA-8"
+    const val kmmViewmodel = "1.0.0-ALPHA-8" // https://github.com/rickclephas/KMM-ViewModel
+    const val ktor = "2.3.0" // https://mvnrepository.com/artifact/io.ktor/ktor-client-core-jvm
 
     // Android only
+    const val androidGradlePlugin = "8.0.1"
     const val androidX ="2.6.1"
     const val koinAndroid = "3.4.0"
     const val koinAndroidCompose = "3.4.4"
+    const val kotlinCompilerExtensionVersion = "1.4.7" // // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
 }
 
 object Multiplatform {

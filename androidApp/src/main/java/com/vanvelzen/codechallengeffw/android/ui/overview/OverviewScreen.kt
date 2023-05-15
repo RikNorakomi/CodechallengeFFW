@@ -68,13 +68,22 @@ fun OverViewScreen(
     var endOfListReached by rememberSaveable { mutableStateOf(false) }
 
     when (state) {
-        is Error -> PlaceholderErrorState(error = (state as Error).errorMessage)
+        is Error ->
+            PlaceholderWithPullToRefresh(
+                placeholder = { PlaceholderErrorState(error = (state as Error).errorMessage) },
+                refreshing = refreshing,
+                pullRefreshState = pullRefreshState
+            )
         is Loading -> PlaceholderLoadingState()
         is Success -> {
             endOfListReached = false
             val characters = (state as Success).people
             val canLoadMore = (state as Success).canLoadMore
-            if (characters.isEmpty()) PlaceholderEmptyState()
+            if (characters.isEmpty()) PlaceholderWithPullToRefresh(
+                placeholder = { PlaceholderEmptyState() },
+                refreshing = refreshing,
+                pullRefreshState = pullRefreshState
+            )
             else CharacterList(
                 people = characters,
                 onItemClick = { people -> onItemClick(people) },
@@ -89,6 +98,19 @@ fun OverViewScreen(
                 }
             )
         }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun PlaceholderWithPullToRefresh(
+    placeholder: @Composable () -> Unit,
+    refreshing: Boolean,
+    pullRefreshState: PullRefreshState
+) {
+    Box(Modifier.pullRefresh(pullRefreshState)) {
+        placeholder()
+        PullRefreshIndicator(refreshing, pullRefreshState, Modifier.align(Alignment.TopCenter))
     }
 }
 

@@ -8,6 +8,7 @@ import com.vanvelzen.codechallengeffw.data.remote.StarWarsWithImagesApi
 import com.vanvelzen.codechallengeffw.data.dto.PeopleWithImagesDto
 import com.vanvelzen.codechallengeffw.data.dto.toStarWarsCharacters
 import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
@@ -17,7 +18,8 @@ import kotlinx.coroutines.withContext
 class StarWarsRepository(
     private val starWarsApi: StarWarsApi,
     private val starWarsWithImagesApi: StarWarsWithImagesApi,
-    private val log: Logger
+    private val log: Logger,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
 
     internal data class LocalCacheMock (
@@ -31,7 +33,7 @@ class StarWarsRepository(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     suspend fun getStarWarsCharacters(): Response<List<StarWarsCharacter>> {
-        return withContext(Dispatchers.Main) {
+        return withContext(ioDispatcher) {
 
             // If there is no next page to load on api return cached data
             with (localCacheMock){

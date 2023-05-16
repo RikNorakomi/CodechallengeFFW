@@ -1,5 +1,6 @@
 package com.vanvelzen.codechallengeffw.mock
 
+import com.vanvelzen.codechallengeffw.data.dto.PeopleResponse
 import com.vanvelzen.codechallengeffw.data.remote.Response
 import com.vanvelzen.codechallengeffw.data.remote.StarWarsWithImagesApi
 import com.vanvelzen.codechallengeffw.data.dto.PeopleWithImagesDto
@@ -28,5 +29,9 @@ class StarWarsWithImagesApiMock : StarWarsWithImagesApi {
 
     fun successResponse(): Response<List<PeopleWithImagesDto>> {
         return Response.Success(data = listPeopleWithImagesMock)
+    }
+
+    fun errorResponse(errorMessage: String = ""): Response<List<PeopleWithImagesDto>> {
+        return Response.Error(errorMessage)
     }
 }

@@ -22,6 +22,10 @@ class StarWarsRepository(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
 
+    /**
+     * Due to time constraints I ahve not yet implemented a multiplatform database solution,
+     * but opted here for a simple in memory cache solution to "mimic" local storage preventing unnecessary network requests
+     */
     internal data class LocalCacheMock (
         val cachedCharacters: MutableSet<StarWarsCharacter> = mutableSetOf(),
         var lastCachedPage: Int? = null,

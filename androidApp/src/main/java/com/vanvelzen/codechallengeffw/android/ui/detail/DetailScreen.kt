@@ -25,7 +25,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -80,6 +79,11 @@ fun DetailScreen(
 @Composable
 fun DetailScreenContent(character: StarWarsCharacter) {
     val showShimmer = remember { mutableStateOf(true) }
+    val detailsMap = remember { character.createCharacterDetailsMap() }
+    val keys = remember { detailsMap.keys.toList() }
+    val values = remember { detailsMap.values.toList() }
+    val numColumns = remember { 3 }
+    val numRows = remember { (keys.size + numColumns - 1) / numColumns } // Round up to nearest integer
 
     Column(
         modifier = Modifier
@@ -115,14 +119,9 @@ fun DetailScreenContent(character: StarWarsCharacter) {
             Column(
                 modifier = Modifier.padding(8.dp),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = CenterHorizontally
             ) {
-                val detailsMap = character.createCharacterDetailsMap()
-                val keys = detailsMap.keys.toList()
-                val values = detailsMap.values.toList()
-                val numColumns = 3
-                val numRows =
-                    (keys.size + numColumns - 1) / numColumns // Round up to nearest integer
+
                 for (i in 0 until numRows) {
                     Row(
                         modifier = Modifier

@@ -13,7 +13,7 @@ import kotlin.test.assertEquals
 @OptIn(ExperimentalCoroutinesApi::class)
 class StarWarsRepositoryTest {
 
-    private var logger = Logger(StaticConfig())
+    private val logger = Logger(StaticConfig())
     private val starWarsApiMock = StarWarsApiMock()
     private val starWarsWithImagesApiMock = StarWarsWithImagesApiMock()
 

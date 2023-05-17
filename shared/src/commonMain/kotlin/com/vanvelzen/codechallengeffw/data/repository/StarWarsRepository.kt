@@ -77,7 +77,7 @@ class StarWarsRepository(
                                 ignoreCase = true
                             ))
                         }
-                        ?.imageUrl
+                        ?.image
                     log.v { "For: ${starWarsCharacter.name}: Added imageUrl: ${starWarsCharacter.imageUrl}" }
                 }
             } else log.e { "Getting image urls from the Star Wars api with images failed!" }

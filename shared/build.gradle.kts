@@ -49,6 +49,7 @@ kotlin {
             dependencies {
                 implementation(kotlin("test"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+                implementation("io.ktor:ktor-client-mock:${Versions.ktor}")
 //                implementation("app.cash.turbine:turbine:0.13.0")
             }
         }

@@ -32,8 +32,6 @@ class StarWarsWithImagesApiImpl(
 
     private val json = Json { ignoreUnknownKeys = true }
 
-
-
     private fun HttpRequestBuilder.people(path: String) {
         url {
             takeFrom(BASE_URL)

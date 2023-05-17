@@ -23,7 +23,7 @@ open class DetailScreenViewModel(
     = MutableStateFlow(UiStateDetail.Loading)
     val uiState: StateFlow<UiStateDetail> = _uiState
 
-    fun fetchCharacterDetails(characterId: String?) {
+    fun fetchCharacterDetails(characterId: String) {
         viewModelScope.launch {
             if (characterId.isNullOrEmpty()){
                 _uiState.update {

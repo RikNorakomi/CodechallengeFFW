@@ -53,14 +53,16 @@ fun DetailScreen(
     characterId: String?,
     log: Logger
 ) {
-    if (characterId.isNullOrEmpty()) PlaceholderErrorState(error = "Unable to load character details. No character ID?!")
-
     val viewModel: DetailScreenViewModel = koinViewModel()
     val state by viewModel.uiState.collectAsState()
 
-    // TODO: Look into only one time fetching from api
-    LaunchedEffect(true) {
-        viewModel.fetchCharacterDetails(characterId)
+    if (characterId.isNullOrEmpty()) {
+        PlaceholderErrorState(error = "Unable to load character details. No character ID?!")
+    } else {
+        // TODO: Look into only one time fetching from api
+        LaunchedEffect(true) {
+            viewModel.fetchCharacterDetails(characterId)
+        }
     }
 
     when (state){

@@ -3,8 +3,8 @@ package com.vanvelzen.codechallengeffw.data.repository
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.StaticConfig
 import com.vanvelzen.codechallengeffw.data.remote.Response
-import com.vanvelzen.codechallengeffw.mock.StarWarsApiMock
 import com.vanvelzen.codechallengeffw.mock.StarWarsWithImagesApiMock
+import com.vanvelzen.codechallengeffw.mock.SwapiSDKMock
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -14,15 +14,15 @@ import kotlin.test.assertEquals
 class StarWarsRepositoryTest {
 
     private val logger = Logger(StaticConfig())
-    private val starWarsApiMock = StarWarsApiMock()
+    private val swapiSDK = SwapiSDKMock()
     private val starWarsWithImagesApiMock = StarWarsWithImagesApiMock()
 
     private val repository: StarWarsRepository =
-        StarWarsRepository(starWarsApiMock, starWarsWithImagesApiMock, logger)
+        StarWarsRepository(swapiSDK, starWarsWithImagesApiMock, logger)
 
     @Test
     fun `Get StarWars Characters_both apis return success_response successful with available image urls`() = runTest {
-        starWarsApiMock.prepareResult(starWarsApiMock.successResponse())
+        swapiSDK.prepareResult(swapiSDK.successResponse())
         starWarsWithImagesApiMock.prepareResult(starWarsWithImagesApiMock.successResponse())
         val response = repository.getStarWarsCharacters()
         assertEquals(response is Response.Success, actual = true)
@@ -31,7 +31,7 @@ class StarWarsRepositoryTest {
 
     @Test
     fun `Get StarWars Characters_only Swapi API returns success_response successful without available image urls`() = runTest {
-        starWarsApiMock.prepareResult(starWarsApiMock.successResponse())
+        swapiSDK.prepareResult(swapiSDK.successResponse())
         starWarsWithImagesApiMock.prepareResult(starWarsWithImagesApiMock.errorResponse())
         val response = repository.getStarWarsCharacters()
         assertEquals(response is Response.Success, actual = true)
@@ -40,7 +40,7 @@ class StarWarsRepositoryTest {
 
     @Test
     fun `Get StarWars Characters_StarWarsApi returns error_response error`() = runTest {
-        starWarsApiMock.prepareResult(starWarsApiMock.errorResponse())
+        swapiSDK.prepareResult(swapiSDK.errorResponse())
         starWarsWithImagesApiMock.prepareResult(starWarsWithImagesApiMock.successResponse())
         val response = repository.getStarWarsCharacters()
         assertEquals(response is Response.Error, actual = true)

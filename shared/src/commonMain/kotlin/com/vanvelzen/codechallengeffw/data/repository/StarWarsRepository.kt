@@ -26,7 +26,7 @@ class StarWarsRepository(
     private val cachedCharactersWithImages = mutableListOf<PeopleWithImagesDto>()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    suspend fun getStarWarsCharacters(forceReload: Boolean): Response<List<StarWarsCharacter>> {
+    suspend fun getStarWarsCharacters(forceReload: Boolean = false): Response<List<StarWarsCharacter>> {
         return withContext(ioDispatcher) {
 
             val deferredList = listOf(

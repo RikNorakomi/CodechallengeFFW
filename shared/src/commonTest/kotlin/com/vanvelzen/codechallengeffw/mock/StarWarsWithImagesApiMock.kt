@@ -13,8 +13,6 @@ class StarWarsWithImagesApiMock : StarWarsWithImagesApi {
 
     fun prepareResult(response: Response<List<PeopleWithImagesDto>>) {
         nextResult = { response }
-
-
     }
 
     override suspend fun getAllCharacters(): Response<List<PeopleWithImagesDto>> {

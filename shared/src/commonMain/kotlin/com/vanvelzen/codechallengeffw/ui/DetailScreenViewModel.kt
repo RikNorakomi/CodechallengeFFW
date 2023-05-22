@@ -25,7 +25,7 @@ open class DetailScreenViewModel(
 
     fun fetchCharacterDetails(characterId: String) {
         viewModelScope.launch {
-            if (characterId.isNullOrEmpty()){
+            if (characterId.isEmpty()){
                 _uiState.update {
                     UiStateDetail.Error("Unable to load character details")
                 }

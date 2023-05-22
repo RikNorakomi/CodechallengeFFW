@@ -1,7 +1,6 @@
 package com.vanvelzen.codechallengeffw
 
 import co.touchlab.kermit.Logger
-import co.touchlab.kermit.Logger.Companion.tag
 import co.touchlab.kermit.StaticConfig
 import co.touchlab.kermit.platformLogWriter
 import com.vanvelzen.codechallengeffw.data.local.Database
@@ -12,6 +11,7 @@ import com.vanvelzen.codechallengeffw.data.remote.StarWarsApiImpl
 import com.vanvelzen.codechallengeffw.data.remote.StarWarsWithImagesApiImpl
 import com.vanvelzen.codechallengeffw.data.repository.StarWarsRepository
 import com.vanvelzen.codechallengeffw.data.sdk.SwapiSDK
+import com.vanvelzen.codechallengeffw.data.sdk.SwapiSDKImpl
 import io.ktor.client.HttpClient
 import org.koin.core.KoinApplication
 import org.koin.core.component.KoinComponent
@@ -77,11 +77,11 @@ private val coreModule = module {
         Database(get())
     }
 
-    single {
-        SwapiSDK(
+    single<SwapiSDK> {
+        SwapiSDKImpl(
             get(),
             get(),
-            get { parametersOf("SwapiSDK") },
+            get { parametersOf("SwapiSDKImpl") },
         )
     }
 

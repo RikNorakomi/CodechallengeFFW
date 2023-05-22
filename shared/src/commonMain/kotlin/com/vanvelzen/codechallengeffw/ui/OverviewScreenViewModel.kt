@@ -30,9 +30,9 @@ open class OverviewScreenViewModel(
         fetchStarWarsCharacters()
     }
 
-    private fun fetchStarWarsCharacters() {
+    private fun fetchStarWarsCharacters(pullToRefresh: Boolean = false) {
         viewModelScope.launch {
-            val response = repository.getStarWarsCharacters()
+            val response = repository.getStarWarsCharacters(pullToRefresh)
             _isRefreshing.value = false
             _uiState.update {
                 when (response) {
@@ -45,11 +45,11 @@ open class OverviewScreenViewModel(
 
     fun onPullToRefresh() {
         _isRefreshing.value = true
-        fetchStarWarsCharacters()
+        fetchStarWarsCharacters(true)
     }
 
     fun onEndOfListReached() {
-        fetchStarWarsCharacters()
+        fetchStarWarsCharacters(false)
     }
 }
 

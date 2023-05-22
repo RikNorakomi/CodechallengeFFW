@@ -26,13 +26,11 @@ class StarWarsRepository(
     private val cachedCharactersWithImages = mutableListOf<PeopleWithImagesDto>()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    suspend fun getStarWarsCharacters(): Response<List<StarWarsCharacter>> {
+    suspend fun getStarWarsCharacters(forceReload: Boolean): Response<List<StarWarsCharacter>> {
         return withContext(ioDispatcher) {
 
-
-
             val deferredList = listOf(
-                this.async { swapiSDK.getPeople() },
+                this.async { swapiSDK.getPeople(forceReload) },
                 this.async { getCharactersWithImageUrl() },
             )
 
@@ -75,7 +73,11 @@ class StarWarsRepository(
         val response = swapiSDK.getPersonById(id)
         if (response is Response.Error) return response
 
-        return Response.Success((response as Response.Success).data.toStarWarsCharacter())
+        // Add image url from Image APIs cached response
+        val starWarsCharacter = (response as Response.Success).data.toStarWarsCharacter()
+        starWarsCharacter.imageUrl = cachedCharactersWithImages.firstOrNull { it.id.toString() == id }?.image
+
+        return Response.Success(starWarsCharacter)
     }
 
     private suspend fun getCharactersWithImageUrl(): Response<List<PeopleWithImagesDto>> =

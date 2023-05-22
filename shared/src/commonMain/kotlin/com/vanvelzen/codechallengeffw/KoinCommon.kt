@@ -4,6 +4,7 @@ import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Logger.Companion.tag
 import co.touchlab.kermit.StaticConfig
 import co.touchlab.kermit.platformLogWriter
+import com.vanvelzen.codechallengeffw.data.local.Database
 import com.vanvelzen.codechallengeffw.data.remote.KtorClient
 import com.vanvelzen.codechallengeffw.data.remote.StarWarsApi
 import com.vanvelzen.codechallengeffw.data.remote.StarWarsWithImagesApi
@@ -73,6 +74,18 @@ private val coreModule = module {
     factory { (tag: String?) -> if (tag != null) baseLogger.withTag(tag) else baseLogger }
 
     single {
+        Database(get())
+    }
+
+    single {
+        SwapiSDK(
+            get(),
+            get(),
+            get { parametersOf("SwapiSDK") },
+        )
+    }
+
+    single {
         StarWarsRepository(
             get(),
             get(),
@@ -80,12 +93,6 @@ private val coreModule = module {
         )
     }
 
-    single {
-        SwapiSDK(
-            get(),
-            get(),
-        )
-    }
 }
 
 // Simple function to clean up the syntax a bit

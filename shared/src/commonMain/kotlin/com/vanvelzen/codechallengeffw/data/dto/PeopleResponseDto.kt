@@ -10,13 +10,12 @@ data class PeopleResponse(
     val previous: String? = null,
     val count: Int = 0,
     val results: List<PeopleDto> = emptyList(),
-    var pageId: Int,
 )
 
-fun PeopleResponse.toPeopleEntityList(): List<PeopleEntity> {
+fun PeopleResponse.toPeopleEntityList(pageId: Int): List<PeopleEntity> {
     val collection = arrayListOf<PeopleEntity>()
     this.results.forEach {
-        collection.add(it.toPeopleEntity(this.pageId))
+        collection.add(it.toPeopleEntity(pageId))
     }
     return collection
 }
@@ -58,7 +57,7 @@ fun PeopleDto.toPeopleEntity(pageId: Int): PeopleEntity {
             birthYear = birthYear,
             eyeColor = eyeColor,
             imageUrl = null,
-            pageId = pageId
+            pageId = pageId.toLong()
         )
     }
 }

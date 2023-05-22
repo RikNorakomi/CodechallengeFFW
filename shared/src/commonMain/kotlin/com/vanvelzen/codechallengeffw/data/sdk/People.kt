@@ -1,5 +1,7 @@
 package com.vanvelzen.codechallengeffw.data.sdk
 
+import com.vanvelzen.codechallengeffw.data.dto.PeopleResponse
+import com.vanvelzen.codechallengeffw.data.dto.toStarWarsCharacter
 import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 
 class People(
@@ -15,6 +17,12 @@ class People(
     val eyeColor: String,
     val imageUrl: String?,
 )
+
+fun List<People>.toStarWarsCharacters(): List<StarWarsCharacter> {
+    val collection = arrayListOf<StarWarsCharacter>()
+    this.forEach {collection.add(it.toStarWarsCharacter()) }
+    return collection
+}
 
 fun People.toStarWarsCharacter(): StarWarsCharacter {
     return with(this) {

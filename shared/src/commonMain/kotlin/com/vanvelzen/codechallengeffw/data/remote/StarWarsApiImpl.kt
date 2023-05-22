@@ -52,8 +52,6 @@ class StarWarsApiImpl(
                     people("api/people/?page=${page}")
                 }.body()
 
-                response.pageId = page
-
                 Response.Success(response)
             } catch (e: Exception) {
                 // For the sake of simplicity for this code challenge we'll just return

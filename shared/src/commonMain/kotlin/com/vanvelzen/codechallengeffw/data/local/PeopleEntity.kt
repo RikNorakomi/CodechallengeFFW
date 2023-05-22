@@ -16,7 +16,7 @@ class PeopleEntity(
     val birthYear: String,
     val eyeColor: String,
     val imageUrl: String?,
-    val pageId: Int,
+    val pageId: Long,
 )
 
 fun List<PeopleEntity>.toPeopleList() : List<People> {

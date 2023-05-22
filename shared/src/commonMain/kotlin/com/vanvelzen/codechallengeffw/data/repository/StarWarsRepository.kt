@@ -1,15 +1,13 @@
 package com.vanvelzen.codechallengeffw.data.repository
 
 import co.touchlab.kermit.Logger
-import com.vanvelzen.codechallengeffw.data.dto.PeopleResponse
-import com.vanvelzen.codechallengeffw.data.remote.Response
-import com.vanvelzen.codechallengeffw.data.remote.StarWarsApi
-import com.vanvelzen.codechallengeffw.data.remote.StarWarsWithImagesApi
 import com.vanvelzen.codechallengeffw.data.dto.PeopleWithImagesDto
-import com.vanvelzen.codechallengeffw.data.dto.toStarWarsCharacters
+import com.vanvelzen.codechallengeffw.data.remote.Response
+import com.vanvelzen.codechallengeffw.data.remote.StarWarsWithImagesApi
 import com.vanvelzen.codechallengeffw.data.sdk.People
 import com.vanvelzen.codechallengeffw.data.sdk.SwapiSDK
 import com.vanvelzen.codechallengeffw.data.sdk.toStarWarsCharacter
+import com.vanvelzen.codechallengeffw.data.sdk.toStarWarsCharacters
 import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -25,36 +23,16 @@ class StarWarsRepository(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
 
-    /**
-     * Due to time constraints I ahve not yet implemented a multiplatform database solution,
-     * but opted here for a simple in memory cache solution to "mimic" local storage preventing unnecessary network requests
-     */
-    internal data class LocalCacheMock (
-        val cachedCharacters: MutableSet<StarWarsCharacter> = mutableSetOf(),
-        var lastCachedPage: Int? = null,
-        var hasNextPage: Boolean = true,
-    )
-
-    private val localCacheMock = LocalCacheMock()
     private val cachedCharactersWithImages = mutableListOf<PeopleWithImagesDto>()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     suspend fun getStarWarsCharacters(): Response<List<StarWarsCharacter>> {
         return withContext(ioDispatcher) {
 
-            // If there is no next page to load on api return cached data
-            with (localCacheMock){
-                if (!hasNextPage){
-                    return@withContext Response.Success(cachedCharacters.toList(), false)
-                }
-            }
 
-            // Else determine which page to load
-            val pageToLoad = (localCacheMock.lastCachedPage?.plus(1)) ?: StarWarsApi.FIRST_PAGE_ID
-            log.v { "Fetching page: $pageToLoad" }
 
             val deferredList = listOf(
-                this.async { swapiSDK.getPeople(pageToLoad) },
+                this.async { swapiSDK.getPeople() },
                 this.async { getCharactersWithImageUrl() },
             )
 
@@ -69,7 +47,7 @@ class StarWarsRepository(
                 log.e { errorMsg }
                 return@withContext Response.Error(errorMessage = errorMsg)
             }
-            val charactersResponse = (responseCharacterDetails as Response.Success).data as PeopleResponse
+            val charactersResponse = (responseCharacterDetails as Response.Success).data as List<People>
             var characters = charactersResponse.toStarWarsCharacters()
 
             // When both calls return successfully add imageUrl to data
@@ -89,14 +67,7 @@ class StarWarsRepository(
                 }
             } else log.e { "Getting image urls from the Star Wars api with images failed!" }
 
-            with (localCacheMock){
-                cachedCharacters.addAll(characters)
-                lastCachedPage = pageToLoad
-                hasNextPage = !charactersResponse.next.isNullOrEmpty()
-                log.v { "Local cache has ${cachedCharacters.size} characters. hasNextPage:${hasNextPage}" }
-            }
-
-            return@withContext Response.Success(localCacheMock.cachedCharacters.toList(), localCacheMock.hasNextPage)
+            return@withContext Response.Success(characters.toList(), responseCharacterDetails.canLoadMore)
         }
     }
 

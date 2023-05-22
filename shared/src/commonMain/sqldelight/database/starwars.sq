@@ -10,7 +10,7 @@ CREATE TABLE PeopleEntity (
     birthYear TEXT NOT NULL,
     eyeColor TEXT NOT NULL,
     imageUrl TEXT,
-    pageId TEXT NOT NULL
+    pageId INTEGER NOT NULL
 );
 
 insertCharacter:

@@ -1,10 +1,11 @@
 package com.vanvelzen.codechallengeffw.data.dto
 
+import com.vanvelzen.codechallengeffw.data.sdk.People
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class People(
+data class PeopleDto(
     val name: String = "",
     val height: String = "",
     val homeworld: String = "",
@@ -22,4 +23,22 @@ data class People(
     @SerialName("birth_year") val birthYear: String = "",
     @SerialName("eye_color") val eyeColor: String = "",
 )
+
+fun PeopleDto.toPeople(): People{
+    return with (this) {
+        People(
+            id = this.getID(),
+            name = name,
+            height = height,
+            homeWorld = homeworld,
+            gender = gender,
+            mass = mass,
+            skinColor = skinColor,
+            hairColor = hairColor,
+            birthYear = birthYear,
+            eyeColor = eyeColor,
+            imageUrl = null
+        )
+    }
+}
 

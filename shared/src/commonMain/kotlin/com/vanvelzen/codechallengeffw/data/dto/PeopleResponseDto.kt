@@ -1,5 +1,6 @@
 package com.vanvelzen.codechallengeffw.data.dto
 
+import com.vanvelzen.codechallengeffw.data.local.PeopleEntity
 import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 import kotlinx.serialization.Serializable
 
@@ -8,8 +9,17 @@ data class PeopleResponse(
     val next: String? = "",
     val previous: String? = null,
     val count: Int = 0,
-    val results: List<People> = emptyList()
+    val results: List<PeopleDto> = emptyList(),
+    var pageId: Int,
 )
+
+fun PeopleResponse.toPeopleEntityList(): List<PeopleEntity> {
+    val collection = arrayListOf<PeopleEntity>()
+    this.results.forEach {
+        collection.add(it.toPeopleEntity(this.pageId))
+    }
+    return collection
+}
 
 fun PeopleResponse.toStarWarsCharacters(): List<StarWarsCharacter> {
     val collection = arrayListOf<StarWarsCharacter>()
@@ -17,7 +27,7 @@ fun PeopleResponse.toStarWarsCharacters(): List<StarWarsCharacter> {
     return collection
 }
 
-fun People.toStarWarsCharacter(): StarWarsCharacter {
+fun PeopleDto.toStarWarsCharacter(): StarWarsCharacter {
     return with(this) {
         StarWarsCharacter(
             id = this.getID(),
@@ -34,8 +44,27 @@ fun People.toStarWarsCharacter(): StarWarsCharacter {
     }
 }
 
+fun PeopleDto.toPeopleEntity(pageId: Int): PeopleEntity {
+    return with(this) {
+        PeopleEntity(
+            id = this.getID(),
+            name = name,
+            height = height,
+            homeWorld = homeworld,
+            gender = gender,
+            mass = mass,
+            skinColor = skinColor,
+            hairColor = hairColor,
+            birthYear = birthYear,
+            eyeColor = eyeColor,
+            imageUrl = null,
+            pageId = pageId
+        )
+    }
+}
+
 const val INVALID_CHARACTER_ID = "-1"
-fun People.getID(): String {
+fun PeopleDto.getID(): String {
     val substring = try {
         var string = this.url
         if (url.last().toString() == "/") {

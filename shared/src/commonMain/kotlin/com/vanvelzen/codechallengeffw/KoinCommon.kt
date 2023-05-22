@@ -10,6 +10,7 @@ import com.vanvelzen.codechallengeffw.data.remote.StarWarsWithImagesApi
 import com.vanvelzen.codechallengeffw.data.remote.StarWarsApiImpl
 import com.vanvelzen.codechallengeffw.data.remote.StarWarsWithImagesApiImpl
 import com.vanvelzen.codechallengeffw.data.repository.StarWarsRepository
+import com.vanvelzen.codechallengeffw.data.sdk.SwapiSDK
 import io.ktor.client.HttpClient
 import org.koin.core.KoinApplication
 import org.koin.core.component.KoinComponent
@@ -43,7 +44,7 @@ fun initKoin(appModule: Module): KoinApplication {
 }
 
 private val coreModule = module {
-    single<HttpClient>{
+    single<HttpClient> {
         KtorClient(
             get { parametersOf("KtorClient") },
             get()
@@ -65,7 +66,10 @@ private val coreModule = module {
     // platformLogWriter() is a relatively simple config option, useful for local debugging. For production
     // uses you *may* want to have a more robust configuration from the native platform. In KaMP Kit,
     // that would likely go into platformModule expect/actual. See https://github.com/touchlab/Kermit
-    val baseLogger = Logger(config = StaticConfig(logWriterList = listOf(platformLogWriter())), "CodeChallengeFFW")
+    val baseLogger = Logger(
+        config = StaticConfig(logWriterList = listOf(platformLogWriter())),
+        "CodeChallengeFFW"
+    )
     factory { (tag: String?) -> if (tag != null) baseLogger.withTag(tag) else baseLogger }
 
     single {
@@ -73,6 +77,13 @@ private val coreModule = module {
             get(),
             get(),
             get { parametersOf("StarWarsRepository") },
+        )
+    }
+
+    single {
+        SwapiSDK(
+            get(),
+            get(),
         )
     }
 }

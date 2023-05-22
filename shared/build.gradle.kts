@@ -1,6 +1,7 @@
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization") version Versions.kotlinVersion // https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.serialization
+    id("com.squareup.sqldelight")
     id("com.android.library")
     id("com.google.devtools.ksp") version Versions.kotlinKSP // https://github.com/google/ksp/releases
     id("com.rickclephas.kmp.nativecoroutines") version "1.0.0-ALPHA-7"
@@ -43,6 +44,10 @@ kotlin {
                 implementation(Ktor.contentNegotaiotion)
                 implementation(Ktor.logging)
                 implementation(Ktor.jsonSerialization)
+
+                implementation(Square.sqlDelight)
+                implementation(Kotlinx.dateTime)
+
             }
         }
         val commonTest by getting {
@@ -58,6 +63,8 @@ kotlin {
                 implementation(Ktor.androidClient)
                 implementation(AndroidX.lifecycleViewModel)
                 implementation(AndroidX.lifecycleRuntime)
+                implementation(Square.sqlDelightAndroid)
+
             }
         }
 
@@ -72,6 +79,8 @@ kotlin {
             iosSimulatorArm64Main.dependsOn(this)
             dependencies {
                 implementation(Ktor.iOSClient)
+                implementation(Square.sqlDelightIOS)
+
             }
         }
         val iosX64Test by getting
@@ -87,6 +96,13 @@ kotlin {
 
     kotlin.sourceSets.all {
         languageSettings.optIn("kotlin.experimental.ExperimentalObjCName")
+    }
+}
+
+sqldelight {
+    database("StarWarsDatabase") {
+        packageName = "com.vanvelzen.codechallengeffw.database"
+        sourceFolders = listOf("sqldelight")
     }
 }
 

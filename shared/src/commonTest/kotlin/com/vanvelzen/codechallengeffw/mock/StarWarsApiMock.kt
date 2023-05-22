@@ -1,10 +1,9 @@
 package com.vanvelzen.codechallengeffw.mock
 
-import com.vanvelzen.codechallengeffw.data.dto.People
+import com.vanvelzen.codechallengeffw.data.dto.PeopleDto
 import com.vanvelzen.codechallengeffw.data.dto.PeopleResponse
 import com.vanvelzen.codechallengeffw.data.remote.Response
 import com.vanvelzen.codechallengeffw.data.remote.StarWarsApi
-import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 
 class StarWarsApiMock : StarWarsApi {
 
@@ -22,7 +21,7 @@ class StarWarsApiMock : StarWarsApi {
         return result
     }
 
-    override suspend fun getPersonById(id: String): Response<StarWarsCharacter> {
+    override suspend fun getPersonById(id: String): Response<PeopleDto> {
         TODO("Not yet implemented")
     }
 

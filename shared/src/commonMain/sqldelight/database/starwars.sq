@@ -1,0 +1,31 @@
+CREATE TABLE PeopleEntity (
+    id TEXT NOT NULL,
+    name TEXT NOT NULL,
+    height TEXT NOT NULL,
+    homeWorld TEXT NOT NULL,
+    gender TEXT NOT NULL,
+    mass TEXT NOT NULL,
+    skinColor TEXT NOT NULL,
+    hairColor TEXT NOT NULL,
+    birthYear TEXT NOT NULL,
+    eyeColor TEXT NOT NULL,
+    imageUrl TEXT,
+    pageId TEXT NOT NULL
+);
+
+insertCharacter:
+INSERT OR REPLACE
+INTO PeopleEntity(id, name, height, homeWorld, gender, mass, skinColor, hairColor, birthYear, eyeColor, imageUrl, pageId)
+VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?);
+
+getCharacterById:
+SELECT *
+FROM PeopleEntity
+WHERE id = ?;
+
+removeAllCharacters:
+DELETE FROM PeopleEntity;
+
+selectAllCharacters:
+SELECT PeopleEntity.*
+FROM PeopleEntity;

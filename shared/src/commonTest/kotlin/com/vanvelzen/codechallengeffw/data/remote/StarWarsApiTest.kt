@@ -10,7 +10,7 @@ import com.vanvelzen.codechallengeffw.data.dto.toStarWarsCharacter
 import com.vanvelzen.codechallengeffw.data.remote.StarWarsApi.Companion.FIRST_PAGE_ID
 import com.vanvelzen.codechallengeffw.mock.contentTypeJsonHeader
 import com.vanvelzen.codechallengeffw.mock.getPersonById
-import com.vanvelzen.codechallengeffw.mock.listPeopleMock
+import com.vanvelzen.codechallengeffw.mock.listPeopleMockDtos
 import com.vanvelzen.codechallengeffw.mock.logger
 import com.vanvelzen.codechallengeffw.mock.mockKtorClientReturningNotFoundResponse
 import com.vanvelzen.codechallengeffw.mock.peopleResponseMock
@@ -42,8 +42,8 @@ class StarWarsApiTest {
                 content = """{
                     "next":null,
                     "previous":null,
-                    "count":${listPeopleMock.size},
-                    "results": ${Json.encodeToString(listPeopleMock)}
+                    "count":${listPeopleMockDtos.size},
+                    "results": ${Json.encodeToString(listPeopleMockDtos)}
                     }""",
                 headers = contentTypeJsonHeader
             )
@@ -65,8 +65,8 @@ class StarWarsApiTest {
 
     @Test
     fun `Get Person by Id_success`() = runTest {
-        val validId = listPeopleMock[0].getID()
-        val apiResponse = listPeopleMock.getPersonById(validId)
+        val validId = listPeopleMockDtos[0].getID()
+        val apiResponse = listPeopleMockDtos.getPersonById(validId)
         val engine = MockEngine {
             assertEquals("https://swapi.dev/api/people/${validId}", it.url.toString())
             respond(
@@ -86,7 +86,7 @@ class StarWarsApiTest {
 
     @Test
     fun `Get Person by Id_failure`() = runTest {
-        val validId = listPeopleMock[0].getID()
+        val validId = listPeopleMockDtos[0].getID()
         val starWarsApi = StarWarsApiImpl(logger, mockKtorClientReturningNotFoundResponse())
 
         val result = starWarsApi.getPersonById(id = validId)

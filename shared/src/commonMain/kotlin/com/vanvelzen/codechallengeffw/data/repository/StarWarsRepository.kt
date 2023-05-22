@@ -7,6 +7,9 @@ import com.vanvelzen.codechallengeffw.data.remote.StarWarsApi
 import com.vanvelzen.codechallengeffw.data.remote.StarWarsWithImagesApi
 import com.vanvelzen.codechallengeffw.data.dto.PeopleWithImagesDto
 import com.vanvelzen.codechallengeffw.data.dto.toStarWarsCharacters
+import com.vanvelzen.codechallengeffw.data.sdk.People
+import com.vanvelzen.codechallengeffw.data.sdk.SwapiSDK
+import com.vanvelzen.codechallengeffw.data.sdk.toStarWarsCharacter
 import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +19,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 
 class StarWarsRepository(
-    private val starWarsApi: StarWarsApi,
+    private val swapiSDK: SwapiSDK,
     private val starWarsWithImagesApi: StarWarsWithImagesApi,
     private val log: Logger,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.Default
@@ -51,7 +54,7 @@ class StarWarsRepository(
             log.v { "Fetching page: $pageToLoad" }
 
             val deferredList = listOf(
-                this.async { starWarsApi.getPeople(pageToLoad) },
+                this.async { swapiSDK.getPeople(pageToLoad) },
                 this.async { getCharactersWithImageUrl() },
             )
 
@@ -98,12 +101,10 @@ class StarWarsRepository(
     }
 
     suspend fun getCharacterDetails(id: String): Response<StarWarsCharacter> {
-        val cachedCharacter = localCacheMock.cachedCharacters.firstOrNull { it.id == id }
-        if (cachedCharacter == null) {
-            log.e { "Unable to find character with id: $id in cache. Should never happen!" }
-        } else return Response.Success(cachedCharacter)
+        val response = swapiSDK.getPersonById(id)
+        if (response is Response.Error) return response
 
-        return starWarsApi.getPersonById(id)
+        return Response.Success((response as Response.Success).data.toStarWarsCharacter())
     }
 
     private suspend fun getCharactersWithImageUrl(): Response<List<PeopleWithImagesDto>> =

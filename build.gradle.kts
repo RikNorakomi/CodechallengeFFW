@@ -6,6 +6,12 @@ plugins {
     kotlin("multiplatform").version(Versions.kotlinVersion).apply(false)
 }
 
+buildscript {
+    dependencies {
+        classpath(Square.sqlDelightGradlePlugin)
+    }
+}
+
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }

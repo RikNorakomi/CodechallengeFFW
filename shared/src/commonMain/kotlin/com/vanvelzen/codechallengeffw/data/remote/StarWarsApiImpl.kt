@@ -1,6 +1,6 @@
 package com.vanvelzen.codechallengeffw.data.remote
 
-import com.vanvelzen.codechallengeffw.data.dto.People
+import com.vanvelzen.codechallengeffw.data.dto.PeopleDto
 import com.vanvelzen.codechallengeffw.data.dto.PeopleResponse
 import com.vanvelzen.codechallengeffw.data.dto.toStarWarsCharacter
 import com.vanvelzen.codechallengeffw.data.dto.toStarWarsCharacters
@@ -52,6 +52,8 @@ class StarWarsApiImpl(
                     people("api/people/?page=${page}")
                 }.body()
 
+                response.pageId = page
+
                 Response.Success(response)
             } catch (e: Exception) {
                 // For the sake of simplicity for this code challenge we'll just return
@@ -60,15 +62,15 @@ class StarWarsApiImpl(
         }
     }
 
-    override suspend fun getPersonById(id: String): Response<StarWarsCharacter> {
+    override suspend fun getPersonById(id: String): Response<PeopleDto> {
         return withContext(ioDispatcher) {
             log.d { "Fetching character details for person with id:$id" }
             try {
-                val response: People = client.get {
+                val response: PeopleDto = client.get {
                     people("api/people/${id}")
                 }.body()
 
-                Response.Success(response.toStarWarsCharacter())
+                Response.Success(response)
             } catch (e: Exception) {
                 // For the sake of simplicity for this code challenge we'll just return
                 Response.Error(e.toString())

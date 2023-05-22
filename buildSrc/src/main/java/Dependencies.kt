@@ -3,11 +3,13 @@ object Versions {
     const val koin = "3.2.0"
     const val koinAndroidXViewModel = "2.2.3" // Latest versions: https://mvnrepository.com/artifact/org.koin/koin-androidx-viewmodel?repo=jcenter
     const val kotlinxSerialization = "1.5.0"
+    const val kotlinxDateTime = "0.4.0" // https://github.com/Kotlin/kotlinx-datetime/releases
     const val kotlinVersion = "1.8.21"
     const val kotlinKSP = "1.8.21-1.0.11" // https://github.com/google/ksp
     const val nativeCoroutines = "1.0.0-ALPHA-8"
     const val kmmViewmodel = "1.0.0-ALPHA-8" // https://github.com/rickclephas/KMM-ViewModel
     const val ktor = "2.3.0" // https://mvnrepository.com/artifact/io.ktor/ktor-client-core-jvm
+    const val sqlDelight = "1.5.5" // https://mvnrepository.com/artifact/com.squareup.sqldelight/runtime
 
     // Android only
     const val androidGradlePlugin = "8.0.1"
@@ -52,11 +54,19 @@ object Ktor {
 
 object Kotlinx {
     const val serialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.kotlinxSerialization}"
+    const val dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.kotlinxDateTime}"
 }
 
 object AndroidX {
     const val lifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.androidX}"
     const val lifecycleRuntime = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.androidX}"
+}
+
+object Square {
+    const val sqlDelight = "com.squareup.sqldelight:runtime:${Versions.sqlDelight}"
+    const val sqlDelightGradlePlugin = "com.squareup.sqldelight:gradle-plugin:${Versions.sqlDelight}"
+    const val sqlDelightAndroid = "com.squareup.sqldelight:android-driver:${Versions.sqlDelight}"
+    const val sqlDelightIOS = "com.squareup.sqldelight:native-driver:${Versions.sqlDelight}"
 }
 
 object Logging {

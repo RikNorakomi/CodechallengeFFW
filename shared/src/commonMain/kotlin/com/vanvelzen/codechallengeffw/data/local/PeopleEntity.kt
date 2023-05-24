@@ -26,20 +26,18 @@ fun List<PeopleEntity>.toPeopleList() : List<People> {
 }
 
 fun PeopleEntity.toPeople(): People {
-    return with (this) {
-        People(
-            id = id,
-            name = name,
-            height = height,
-            homeWorld = homeWorld,
-            gender = gender,
-            mass = mass,
-            skinColor = skinColor,
-            hairColor = hairColor,
-            birthYear = birthYear,
-            eyeColor = eyeColor,
-            imageUrl = imageUrl,
-        )
-    }
+    return People(
+        id = id,
+        name = name,
+        height = height,
+        homeWorld = homeWorld,
+        gender = gender,
+        mass = mass,
+        skinColor = skinColor,
+        hairColor = hairColor,
+        birthYear = birthYear,
+        eyeColor = eyeColor,
+        imageUrl = imageUrl,
+    )
 }
 

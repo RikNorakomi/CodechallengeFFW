@@ -173,8 +173,7 @@ fun DetailScreenContent(character: StarWarsCharacter) {
 }
 
 fun StarWarsCharacter.createCharacterDetailsMap(): LinkedHashMap<String, String> {
-    return with(this) {
-        linkedMapOf(
+    return linkedMapOf(
             "name" to name,
             "birth year" to birthYear,
             "gender" to gender,
@@ -185,7 +184,6 @@ fun StarWarsCharacter.createCharacterDetailsMap(): LinkedHashMap<String, String>
             "eye color" to eyeColor,
             "hair color" to hairColor,
         )
-    }
 }
 
 @Preview

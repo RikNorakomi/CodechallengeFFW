@@ -1,7 +1,6 @@
 package com.vanvelzen.codechallengeffw.data.remote
 
 import com.vanvelzen.codechallengeffw.data.dto.getID
-import com.vanvelzen.codechallengeffw.data.dto.toStarWarsCharacter
 import com.vanvelzen.codechallengeffw.data.sdk.SwapiSDKImpl.Companion.FIRST_PAGE_ID
 import com.vanvelzen.codechallengeffw.mock.contentTypeJsonHeader
 import com.vanvelzen.codechallengeffw.mock.getPersonById

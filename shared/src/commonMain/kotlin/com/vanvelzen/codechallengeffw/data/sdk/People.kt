@@ -16,25 +16,17 @@ class People(
     val imageUrl: String? = null,
 )
 
-fun List<People>.toStarWarsCharacters(): List<StarWarsCharacter> {
-    val collection = arrayListOf<StarWarsCharacter>()
-    this.forEach {collection.add(it.toStarWarsCharacter()) }
-    return collection
-}
-
 fun People.toStarWarsCharacter(): StarWarsCharacter {
-    return with(this) {
-        StarWarsCharacter(
-            id = id,
-            name = name,
-            height = height,
-            homeWorld = homeWorld,
-            gender = gender,
-            mass = mass,
-            skinColor = skinColor,
-            hairColor = hairColor,
-            birthYear = birthYear,
-            eyeColor = eyeColor
-        )
-    }
+    return StarWarsCharacter(
+        id = id,
+        name = name,
+        height = height,
+        homeWorld = homeWorld,
+        gender = gender,
+        mass = mass,
+        skinColor = skinColor,
+        hairColor = hairColor,
+        birthYear = birthYear,
+        eyeColor = eyeColor
+    )
 }

@@ -1,7 +1,6 @@
 package com.vanvelzen.codechallengeffw.data.dto
 
 import com.vanvelzen.codechallengeffw.data.local.PeopleEntity
-import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -13,39 +12,11 @@ data class PeopleResponse(
 )
 
 fun PeopleResponse.toPeopleEntityList(pageId: Int): List<PeopleEntity> {
-    val collection = arrayListOf<PeopleEntity>()
-    this.results.forEach {
-        collection.add(it.toPeopleEntity(pageId))
-    }
-    return collection
-}
-
-fun PeopleResponse.toStarWarsCharacters(): List<StarWarsCharacter> {
-    val collection = arrayListOf<StarWarsCharacter>()
-    this.results.forEach {collection.add(it.toStarWarsCharacter()) }
-    return collection
-}
-
-fun PeopleDto.toStarWarsCharacter(): StarWarsCharacter {
-    return with(this) {
-        StarWarsCharacter(
-            id = this.getID(),
-            name = name,
-            height = height,
-            homeWorld = homeworld,
-            gender = gender,
-            mass = mass,
-            skinColor = skinColor,
-            hairColor = hairColor,
-            birthYear = birthYear,
-            eyeColor = eyeColor,
-        )
-    }
+    return results.map { it.toPeopleEntity(pageId) }
 }
 
 fun PeopleDto.toPeopleEntity(pageId: Int): PeopleEntity {
-    return with(this) {
-        PeopleEntity(
+    return PeopleEntity(
             id = this.getID(),
             name = name,
             height = height,
@@ -59,7 +30,6 @@ fun PeopleDto.toPeopleEntity(pageId: Int): PeopleEntity {
             imageUrl = null,
             pageId = pageId.toLong()
         )
-    }
 }
 
 const val INVALID_CHARACTER_ID = "-1"

@@ -7,7 +7,6 @@ import com.vanvelzen.codechallengeffw.data.remote.StarWarsWithImagesApi
 import com.vanvelzen.codechallengeffw.data.sdk.People
 import com.vanvelzen.codechallengeffw.data.sdk.SwapiSDK
 import com.vanvelzen.codechallengeffw.data.sdk.toStarWarsCharacter
-import com.vanvelzen.codechallengeffw.data.sdk.toStarWarsCharacters
 import com.vanvelzen.codechallengeffw.models.StarWarsCharacter
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -46,7 +45,9 @@ class StarWarsRepository(
                 return@withContext Response.Error(errorMessage = errorMsg)
             }
             val charactersResponse = (responseCharacterDetails as Response.Success).data as List<People>
-            var characters = charactersResponse.toStarWarsCharacters()
+            var characters = charactersResponse.map {
+                it.toStarWarsCharacter()
+            }
 
             // When both calls return successfully add imageUrl to data
             if (responseImages is Response.Success) {
@@ -93,10 +94,5 @@ class StarWarsRepository(
             }
             response
         }
-
-
-    suspend fun getCharacterDetailsById(id: String): Response<PeopleWithImagesDto> =
-        starWarsWithImagesApi.getCharacterById(id)
-
 }
 

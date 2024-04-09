@@ -12,7 +12,7 @@ The [StarWarsRepository] in commonMain contains an example of how to combine cal
 
 ## Local caching
 Due to time constraints I was not able to implement a (shared) local storage/database implementation yet.
-For now the [StarWarsRepository] makes use of a simple in memory cache to prevent unnecessary network requests.
+For now the [StarWarsRepository] makes use of a simple in memory cache to prevent unnecessary network requests. This simple in memory cache should never(!) be used in production apps, but due to time constraints this is a quick hack used to have a workable pagination functionality implemented. 
 
 ## Pagination
 Due to time constraints I have also opted for creating a custom simple paginating mechanism over trying to implement something like the Paging3 library [see StarWarsRepository & The OverviewScreen composable]
